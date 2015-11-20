@@ -1,5 +1,7 @@
 # thinker
 
+![Build status](https://travis-ci.org/Hexagon/thinker-fts.svg)
+
 Fast and extendible Node.js/Javascript fulltext search engine.
 
 ## Installation
