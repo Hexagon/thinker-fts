@@ -1,6 +1,6 @@
 # thinker
 
-Fast an extendible Node.js/Javascript fulltext search engine.
+Fast and extendible Node.js/Javascript fulltext search engine.
 
 ## Installation
 
@@ -13,4 +13,4 @@ Fast an extendible Node.js/Javascript fulltext search engine.
 [Pehr Boman](https://github.com/unkelpehr/)
 
 ## Licence
-Licensed under the [New BSD License](http://opensource.org/licenses/bsd-license.php)
+Licensed under the [MIT License](http://opensource.org/licenses/MIT)
