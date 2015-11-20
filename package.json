@@ -27,7 +27,7 @@
   "dependencies": {
   },
   "devDependencies": {
-    "fast-leveshtein": "*"
+    "fast-levenshtein": "*"
   },
   "license": "MIT"
 }
