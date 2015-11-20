@@ -1,0 +1,33 @@
+{
+  "name": "thinker-fts",
+  "version": "1.0.0",
+  "description": "Javascript/Node.js in-memory full text search engine.",
+  "author": "Hexagon <github.com/hexagon>",
+  "contributors": [{
+    "name": "Pehr Boman",
+    "email": "github.com/unkelpehr"
+  }],
+  "scripts": {
+    "test": "mocha",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hexagon/thinker-fts"
+  },
+  "bugs": {
+    "url": "https://github.com/hexagon/thinker-fts/issues"
+  },
+  "keywords": [
+    "thinker",
+    "fts",
+    "fulltext",
+    "in-memory"
+  ],
+  "dependencies": {
+  },
+  "devDependencies": {
+    "fast-leveshtein": "*"
+  },
+  "license": "MIT"
+}
