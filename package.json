@@ -25,9 +25,11 @@
     "in-memory"
   ],
   "dependencies": {
+    "fast-levenshtein": "*"
   },
   "devDependencies": {
-    "fast-levenshtein": "*"
+    "mocha": "*",
+    "should": "*"
   },
   "license": "MIT"
 }
