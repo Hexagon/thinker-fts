@@ -1,6 +1,6 @@
 # thinker
 
-![Build status](https://travis-ci.org/Hexagon/thinker-fts.svg) [![npm version](https://badge.fury.io/js/thinker-fts.svg)](https://badge.fury.io/js/thinker-fts)
+[![Build status](https://travis-ci.org/Hexagon/thinker-fts.svg)](https://travis-ci.org/Hexagon/thinker-fts) [![npm version](https://badge.fury.io/js/thinker-fts.svg)](https://badge.fury.io/js/thinker-fts)
 
 Fast and extendible Node.js/Javascript fulltext search engine.
 
