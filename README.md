@@ -14,49 +14,47 @@ Fast and extendible Node.js/Javascript fulltext search engine.
   * Expression correction
   * Weighted ranker (configurable weights for each field, all-expression-match-factor, partial vs exact factor etc.)
   * Field preprocessors
-     * HTML-Stripper
+	 * HTML-Stripper
   * Word preprocessors
-     * Swedish stemmer with stemmer stopwords
-     * Stopwords
-     * Wordforms
-     * Stripper for multiple characters
+	 * Swedish stemmer with stemmer stopwords
+	 * Stopwords
+	 * Wordforms
+	 * Stripper for multiple characters
   * Allows saving/loading the index to/from disk, it's a lot faster to load a previously saved index than generating it on the fly.
 
 ## Installation
 
-      npm install thinker-fts
+	  npm install thinker-fts
 
 ## Introduction
 
 ```javascript
-var Thinker = require('./lib');
-
-var thinker 	= Thinker(),
-	ranker 		= Thinker.rankers.standard();
+var Thinker = require('./lib/Thinker'),
+  thinker = new Thinker();
 
 // Connect standard ranker
-thinker.setRanker(ranker);
+thinker.ranker = Thinker.rankers.standard();
 
 // Feed thinker with documents of format [id, textfield, textfield, ...]
 thinker.feed([
-    [1, "Title", "Text"],
-    [2, "Title2", "Texts"]
+	[1, 'Lorem', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'],
+	[2, 'Ipsum', 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.']
 ]);
 
 // Search for text
-var result = thinker.find("Text");
+var result = thinker.find('ut');
 
 // Show result
 console.log(result);
 /* 
-    {
+	{
 		results: {
-			expressions: [ ... ]
+			expressions: [...]
 			documents: [... ]
 		},
-		totalFindTime: 0,
-		totalRankTime: 0
-    }
+		findTime: 1.208248, // ms
+		rankTime: 1.109632 // ms
+	}
 */
 ```
 ## 
