@@ -40,7 +40,7 @@ describe('Simple usage', function () {
 	var thinker 	= Thinker();
 	var ranker 		= Thinker.rankers.standard();
 
-	thinker.setRanker(ranker);
+	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
@@ -105,10 +105,10 @@ describe('Stemmer', function () {
 	var stemmer 	= Thinker.processors.swedishStemmer(stemmerStopwords);
 
 	// We will be using ÅÄÖåäö here.
-	thinker.setCharacters(/[^a-zA-Z0-9åäöÅÄÖ']/g);
+	thinker.characters = /[^a-zA-Z0-9åäöÅÄÖ']/g;
 
 	thinker.addWordProcessor(stemmer);
-	thinker.setRanker(ranker);
+	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
@@ -418,9 +418,9 @@ describe('Partial match', function () {
 	var ranker 		= Thinker.rankers.standard();
 
 	// We will be using ÅÄÖåäö here.
-	thinker.setCharacters(/[^a-zA-Z0-9åäöÅÄÖ']/g);
+	thinker.characters = /[^a-zA-Z0-9åäöÅÄÖ']/g;
 
-	thinker.setRanker(ranker);
+	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
@@ -460,41 +460,32 @@ describe('Partial match', function () {
 });
 
 describe('Partial match with minimum word length match 5', function () {
-
-	var thinker 	= Thinker();
-	var ranker 		= Thinker.rankers.standard();
+	var thinker = Thinker(),
+		ranker = Thinker.rankers.standard();
 
 	// We will be using ÅÄÖåäö here.
-	thinker.setCharacters(/[^a-zA-Z0-9åäöÅÄÖ']/g);
-	thinker.setMinWildcardWordLen(5);
-
-	thinker.setRanker(ranker);
+	thinker.characters = /[^a-zA-Z0-9åäöÅÄÖ']/g;
+	thinker.minWildcardWordLen = 5;
+	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
-	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
-	thinker.feed(exampleTextsCopy);
+	thinker.feed(JSON.parse(JSON.stringify(exampleTexts)));
 
 	describe('Search for "emöt"', function () {
-	
-		var result = thinker.find("emöt");
+		var result = thinker.find('emöt');
 
-		it('Should return one expression', function (done) {	
+		it('Should return one expression', function () {	
 			result.results.expressions.length.should.equal(1);
-			done();
 		});
 
-		it('Expression interpretation should equal "emöt"', function (done) {
+		it('Expression interpretation should equal "emöt"', function () {
 			result.results.expressions[0].interpretation.should.equal("emöt");
-			done();
 		});
 
-		it('Should return zero results', function (done) {
+		it('Should return zero results', function () {
 			result.results.documents.length.should.equal(0);
-			done();
 		});
-	
 	});
-
 });
 
 describe('Ranker', function () {
@@ -512,9 +503,9 @@ describe('Ranker', function () {
 	});
 
 	// We will be using ÅÄÖåäö here.
-	thinker.setCharacters(/[^a-zA-Z0-9åäöÅÄÖ']/g);
+	thinker.characters = /[^a-zA-Z0-9åäöÅÄÖ']/g;
 
-	thinker.setRanker(ranker);
+	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
@@ -592,9 +583,9 @@ describe('Advanced ranker', function () {
 	});
 
 	// We will be using ÅÄÖåäö here.
-	thinker.setCharacters(/[^a-zA-Z0-9åäöÅÄÖ']/g);
+	thinker.characters = /[^a-zA-Z0-9åäöÅÄÖ']/g;
 
-	thinker.setRanker(ranker);
+	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
@@ -663,10 +654,10 @@ describe('Suggestion', function () {
 	var ranker 	  = Thinker.rankers.standard();
 
 	// We will be using ÅÄÖåäö here.
-	thinker.setCharacters(/[^a-zA-Z0-9åäöÅÄÖ']/g);
+	thinker.characters = /[^a-zA-Z0-9åäöÅÄÖ']/g;
 
-	thinker.useSuggestions(true);
-	thinker.setRanker(ranker);
+	thinker.enableSuggestions = true;
+	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
@@ -701,10 +692,10 @@ describe('Word-processor: Stopwords', function () {
 	});
 
 	// We will be using ÅÄÖåäö here.
-	thinker.setCharacters(/[^a-zA-Z0-9åäöÅÄÖ']/g);
+	thinker.characters = /[^a-zA-Z0-9åäöÅÄÖ']/g;
 
 	thinker.addWordProcessor(stopwords);
-	thinker.setRanker(ranker);
+	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
@@ -737,10 +728,10 @@ describe('Word-processor: Multiples', function () {
 	});
 
 	// We will be using ÅÄÖåäö here.
-	thinker.setCharacters(/[^a-zA-Z0-9åäöÅÄÖ']/g);
+	thinker.characters = /[^a-zA-Z0-9åäöÅÄÖ']/g;
 
 	thinker.addWordProcessor(multiples);
-	thinker.setRanker(ranker);
+	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
@@ -788,10 +779,10 @@ describe('Field processor: HTML-Stripper', function () {
 	var stripHtml 	= Thinker.processors.stripHtml();
 
 	// We will be using ÅÄÖåäö here.
-	thinker.setCharacters(/[^a-zA-Z0-9åäöÅÄÖ']/g);
+	thinker.characters = /[^a-zA-Z0-9åäöÅÄÖ']/g;
 
 	thinker.addFieldProcessor(stripHtml);
-	thinker.setRanker(ranker);
+	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleHtml = [
