@@ -25,8 +25,7 @@ THE SOFTWARE.
 'use strict';
 
 var should = require('should'),
-	Thinker = require('../lib/index.js'),
-	processors = require('../lib/processors.js');
+	Thinker = require('../lib/index.js');
 
 /* START OF EXAMPLE DATA */
 var exampleTexts = [
@@ -658,7 +657,41 @@ describe('Advanced ranker', function () {
 
 });
 
-describe('Stopwords', function () {
+describe('Suggestion', function () {
+
+	var thinker   = Thinker();
+	var ranker 	  = Thinker.rankers.standard();
+
+	// We will be using ÅÄÖåäö here.
+	thinker.setCharacters(/[^a-zA-Z0-9åäöÅÄÖ']/g);
+
+	thinker.useSuggestions(true);
+	thinker.setRanker(ranker);
+
+	// We need to make a copy of exampletexts, as feed consumes the object
+	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
+	thinker.feed(exampleTextsCopy);
+
+	describe('Search "liaså"', function () {
+	
+		var result = thinker.find("liaså");
+
+		it('Should return one expression', function (done) {
+			result.results.expressions.length.should.equal(1);
+			done();
+		});
+
+		it('Should return "likaså" as suggestion', function (done) {
+			result.results.expressions[0].suggestion.should.equal('likaså');
+			done();
+		});
+
+	});
+
+});
+
+
+describe('Word-processor: Stopwords', function () {
 
 	var thinker   = Thinker();
 	var ranker 	  = Thinker.rankers.standard();
@@ -695,7 +728,7 @@ describe('Stopwords', function () {
 
 });
 
-describe('Multiples', function () {
+describe('Word-processor: Multiples', function () {
 
 	var thinker   = Thinker();
 	var ranker 	  = Thinker.rankers.standard();
@@ -748,32 +781,142 @@ describe('Multiples', function () {
 
 });
 
-describe('Suggestion', function () {
+describe('Field processor: HTML-Stripper', function () {
 
-	var thinker   = Thinker();
-	var ranker 	  = Thinker.rankers.standard();
+	var thinker   		= Thinker();
+	var ranker 	  		= Thinker.rankers.standard();
+	var stripHtml 	= Thinker.processors.stripHtml();
 
 	// We will be using ÅÄÖåäö here.
 	thinker.setCharacters(/[^a-zA-Z0-9åäöÅÄÖ']/g);
 
-	thinker.useSuggestions(true);
+	thinker.addFieldProcessor(stripHtml);
 	thinker.setRanker(ranker);
 
 	// We need to make a copy of exampletexts, as feed consumes the object
-	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
-	thinker.feed(exampleTextsCopy);
+	var exampleHtml = [
+		[0,"&#x74;&#x69;&#x74;&#x6C;&#x65;","<!-- htmlcomment --><p><script>scriptcontent</script><h1>atitle</h1><style> div > #id { stylecontent; } </style><img alt=\"imgdescription\"><a href=\"http://url\">linktext</a><br><hr/><fakeunclosedtag>aword<strong>&Aring;rsringar &lt;innanf&ouml;r&gt; </p>"]
+	];
+	thinker.feed(exampleHtml);
 
-	describe('Search "liaså"', function () {
+	describe('Search "title"', function () {
 	
-		var result = thinker.find("liaså");
+		var result = thinker.find("title");
 
-		it('Should return one expression', function (done) {
-			result.results.expressions.length.should.equal(1);
+		it('Should return one result', function (done) {
+			result.results.documents.length.should.equal(1);
 			done();
 		});
 
-		it('Should return "likaså" as suggestion', function (done) {
-			result.results.expressions[0].suggestion.should.equal('likaså');
+	});
+
+	describe('Search "htmlcomment"', function () {
+	
+		var result = thinker.find("htmlcomment");
+
+		it('Should return zero results', function (done) {
+			result.results.documents.length.should.equal(0);
+			done();
+		});
+
+	});
+
+	describe('Search "scriptcontent"', function () {
+	
+		var result = thinker.find("scriptcontent");
+
+		it('Should return zero results', function (done) {
+			result.results.documents.length.should.equal(0);
+			done();
+		});
+
+	});
+
+
+	describe('Search "stylecontent"', function () {
+	
+		var result = thinker.find("stylecontent");
+
+		it('Should return zero results', function (done) {
+			result.results.documents.length.should.equal(0);
+			done();
+		});
+
+	});
+
+	describe('Search "atitle"', function () {
+	
+		var result = thinker.find("atitle");
+
+		it('Should return one results', function (done) {
+			result.results.documents.length.should.equal(1);
+			done();
+		});
+
+	});
+
+	describe('Search "imgdescription"', function () {
+	
+		var result = thinker.find("imgdescription");
+
+		it('Should return one results', function (done) {
+			result.results.documents.length.should.equal(1);
+			done();
+		});
+
+	});
+
+	describe('Search "http"', function () {
+	
+		var result = thinker.find("http");
+
+		it('Should return one results', function (done) {
+			result.results.documents.length.should.equal(1);
+			done();
+		});
+
+	});
+
+	describe('Search "fakeunclosedtag"', function () {
+	
+		var result = thinker.find("fakeunclosedtag");
+
+		it('Should return zero results', function (done) {
+			result.results.documents.length.should.equal(0);
+			done();
+		});
+
+	});
+
+	describe('Search "aword"', function () {
+	
+		var result = thinker.find("aword");
+
+		it('Should return one result', function (done) {
+			result.results.documents.length.should.equal(1);
+			done();
+		});
+
+	});
+
+	describe('Search "årsringar"', function () {
+	
+		var result = thinker.find("årsringar");
+
+		it('Should return one result', function (done) {
+			result.results.documents.length.should.equal(1);
+			done();
+		});
+
+	});
+
+
+	describe('Search "innanför"', function () {
+	
+		var result = thinker.find("innanför");
+
+		it('Should return one result', function (done) {
+			result.results.documents.length.should.equal(1);
 			done();
 		});
 
