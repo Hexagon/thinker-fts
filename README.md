@@ -277,7 +277,6 @@ thinker.addWordProcessor(stemmer);
 thinker.ranker = ranker;
 ```
 
-#### thinker
 ## Credits
    
   [Hexagon](https://github.com/hexagon/)
