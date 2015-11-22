@@ -2,29 +2,31 @@
 
 [![Build status](https://travis-ci.org/Hexagon/thinker-fts.svg)](https://travis-ci.org/Hexagon/thinker-fts) [![npm version](https://badge.fury.io/js/thinker-fts.svg)](https://badge.fury.io/js/thinker-fts)
 
-Fast and extendible Node.js/Javascript fulltext search engine.
+Fast and extendible Node.js/Javascript full text search engine.
 
 ## Features
 
   * Highly optimized, will give a ranked resultset within 20 ms on a 5000 (average wikipedia sized) document dataset.
   * In-memory operation
-  * Very few external dependencies
+  * Few external dependencies
   * Natural language search
   * Partial matching
-  * Expression correction/Suggestions
+  * Expression correction / suggestions
   * Weighted ranker (configurable weights for each field, all-expression-match-factor, partial vs exact factor etc.)
   * Field preprocessors
 	 * HTML-Stripper
   * Word preprocessors
-	 * Swedish stemmer with stemmer stopwords
-	 * Stopwords
+	 * Swedish stemmer with stemmer stop words
+	 * Stop words
 	 * Wordforms
 	 * Stripper for multiple characters
-  * Allows saving/loading the index to/from disk, it's a lot faster to load a previously saved index than generating it on the fly.
+  * Allows saving/loading the index to/from disk, but for small datasets you can feed the index on-the-fly.
+
 
 ## Installation
 
 	  npm install thinker-fts
+
 
 ## Quick-start
 
@@ -62,9 +64,10 @@ console.log(result);
 
 Please not that you _have to_ connect a ranker, else find won't provide a result set. The ranker build the result set.
 
+
 ## Basic configuration
 
-Thinkers default configuration is overridden by supplying an optoions object to Thinkers constructor. There is also a couple of settings that can be changed on runtime, both is shown below
+Thinkers default configuration is overridden by supplying an options object to Thinkers constructor. There is also a couple of settings that can be changed on runtime, both is shown below
 
 ```javascript
 
@@ -231,11 +234,11 @@ thinker.addWordProcessor(stopwords);
 thinker.ranker = ranker;
 ```
 
-#### Stopwords
+#### Stop words
 
 Removes words that don't give better precision, normally stuff like 'and', 'I', 'they', 'we', 'can'. Adding the most common words here can speed up the quries a bit, and save some RAM.
 
-Example setting up thinker with standard ranker and stopwords
+Example setting up thinker with standard ranker and stop words
 
 ```javascript
 var thinker   = Thinker(),
@@ -250,21 +253,36 @@ thinker.addWordProcessor(stopwords);
 thinker.ranker = ranker;
 ```
 
-#### Stemmer
+#### Stemmers
 
 Finds the stem of each word that is indexed, 'computers' will become 'computer', 'organized' will become 'organize' etc. This greatly improves accuracy of the matches and weighting.
 
-An optinal feature of the stemmers is to supply a list of words that you don't want to stem down. Names is one thing you probably want to except from the stemmer.
+An optional feature of the stemmers is to supply a list of words that you don't want to stem down.
 
-Currently only available for swedish
+Currently there is two stemmers available, swedish through a custom version of the Snowball algorithm, and english through the Porter algorithm.
 
-Example setting up thinker with standard ranker, stemming, and stemmer stopwords
+Example setting up thinker with standard ranker and english stemming
 
 ```javascript
 var
 	thinker 	= Thinker(),
 	ranker 		= Thinker.rankers.standard(),
-	stemmer 	= Thinker.processors.swedishStemmer({
+	stemmer 	= Thinker.processors.stemmers.english();
+
+thinker.addWordProcessor(stemmer);
+
+thinker.ranker = ranker;
+
+```
+
+
+Example setting up thinker with standard ranker, swedish stemming, and stemmer stop words
+
+```javascript
+var
+	thinker 	= Thinker(),
+	ranker 		= Thinker.rankers.standard(),
+	stemmer 	= Thinker.processors.stemmers.swedish({
 		"stemmer": true,
 		"stemming": true,
 		"dontstemthiseither": true,
@@ -277,11 +295,32 @@ thinker.addWordProcessor(stemmer);
 thinker.ranker = ranker;
 ```
 
+
+## Dependencies
+
+Note: Dependencies is installed automatically by npm
+
+  [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) (https://github.com/hiddentao/fast-levenshtein)
+
+  [stemmer](https://github.com/wooorm/stemmer) (https://github.com/wooorm/stemmer)
+
+
+## Development dependencies
+
+Note: Not needed for normal usage
+
+  [mocha](https://github.com/mochajs/mocha) (https://github.com/mochajs/mocha)
+
+  [should](https://github.com/shouldjs/should.js) (https://github.com/shouldjs/should.js)
+
+
 ## Credits
    
   [Hexagon](https://github.com/hexagon/)
    
   [Pehr Boman](https://github.com/unkelpehr/)
 
+
 ## Licence
+
 Licensed under the [MIT License](http://opensource.org/licenses/MIT)

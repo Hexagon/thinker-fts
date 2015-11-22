@@ -25,7 +25,8 @@
     "in-memory"
   ],
   "dependencies": {
-    "fast-levenshtein": "*"
+    "fast-levenshtein": "*",
+    "stemmer": "*"
   },
   "devDependencies": {
     "mocha": "*",

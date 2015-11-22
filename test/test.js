@@ -80,51 +80,6 @@ describe('Simple usage', function () {
 	});
 });
 
-describe('Stemmer', function () {
-	var stemmerStopwords = {
-		"anders": true,
-		"jonas": true
-	};
-
-	var thinker 	= Thinker();
-	var ranker 		= Thinker.rankers.standard();
-	var stemmer 	= Thinker.processors.swedishStemmer(stemmerStopwords);
-	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
-
-	thinker.addWordProcessor(stemmer);
-	thinker.ranker = ranker;
-
-	thinker.feed(exampleTextsCopy, {
-		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
-	});
-
-	describe('Search for stopword "anders"', function () {	
-		var result = thinker.find("anders");
-
-		it('Should return one expression', function () {	
-			result.results.expressions.length.should.equal(1);
-		});
-
-		it('Expression interpretation be unchanged("anders")', function () {
-			result.results.expressions[0].interpretation.should.equal("anders");
-		});
-
-		it('Should return two results', function () {
-			result.results.documents.length.should.equal(2);
-		});
-
-		it('First result should be a direct match (anders)', function () {
-			result.results.documents[0].directMatches.should.equal(1);
-			result.results.documents[0].partialMatches.should.equal(0);
-		});
-
-		it('Second result should be a partial match (andersson)', function () {
-			result.results.documents[1].directMatches.should.equal(0);
-			result.results.documents[1].partialMatches.should.equal(1);
-		});
-	});
-});
-
 describe('Partial match', function () {
 	var thinker = Thinker();
 
@@ -427,6 +382,354 @@ describe('Word-processor: Multiples', function () {
 			result.results.expressions[0].interpretation.should.equal("k000ale");
 		});
 	});
+});
+
+
+describe('Word processor: Swedish stemmer', function () {
+	var stemmerStopwords = {
+		"anders": true,
+		"jonas": true
+	};
+
+	var thinker 	= Thinker();
+	var ranker 		= Thinker.rankers.standard();
+	var stemmer 	= Thinker.processors.stemmers.swedish(stemmerStopwords);
+	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
+
+	thinker.addWordProcessor(stemmer);
+	thinker.ranker = ranker;
+
+	thinker.feed(exampleTextsCopy, {
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
+	});
+
+	describe('Search for stopword "anders"', function () {	
+		var result = thinker.find("anders");
+
+		it('Should return one expression', function () {	
+			result.results.expressions.length.should.equal(1);
+		});
+
+		it('Expression interpretation be unchanged("anders")', function () {
+			result.results.expressions[0].interpretation.should.equal("anders");
+		});
+
+		it('Should return two results', function () {
+			result.results.documents.length.should.equal(2);
+		});
+
+		it('First result should be a direct match (anders)', function () {
+			result.results.documents[0].directMatches.should.equal(1);
+			result.results.documents[0].partialMatches.should.equal(0);
+		});
+
+		it('Second result should be a partial match (andersson)', function () {
+			result.results.documents[1].directMatches.should.equal(0);
+			result.results.documents[1].partialMatches.should.equal(1);
+		});
+	});
+
+	describe('Search for "Bemötas"', function () {		
+			
+		var result = thinker.find("Bemötas");		
+		
+		it('Should return one expression', function () {			
+			result.results.expressions.length.should.equal(1);		
+		});		
+		
+		it('Expression interpretation should equal "bemöt"', function () {		
+			result.results.expressions[0].interpretation.should.equal("bemöt");		
+		});		
+		
+		it('Should return three results (bemötandet, bemötande, bemött)', function () {		
+			result.results.documents.length.should.equal(3);		
+		});		
+		
+		it('All results should be a direct match', function () {		
+			result.results.documents[0].directMatches.should.equal(1);		
+			result.results.documents[0].partialMatches.should.equal(0);		
+			result.results.documents[1].directMatches.should.equal(1);		
+			result.results.documents[1].partialMatches.should.equal(0);		
+			result.results.documents[2].directMatches.should.equal(1);		
+			result.results.documents[2].partialMatches.should.equal(0);		
+		});		
+			
+ 	});
+ 		 
+	describe('Search for "nyheternas"', function () {
+			
+		var result = thinker.find("nyheternas");		
+		
+		it('Should return one expression', function () {			
+			result.results.expressions.length.should.equal(1);		
+		});		
+		
+		it('Expression interpretation should equal "nyhet"', function () {		
+			result.results.expressions[0].interpretation.should.equal("nyhet");		
+		});		
+		
+		it('Should return 1 document', function () {		
+			result.results.documents.length.should.equal(1);		
+		});		
+		
+		it('All four (nyhet, nyheter, nyheten, nyhetens)results should be a direct match on the first result', function () {		
+			result.results.documents[0].directMatches.should.equal(4);		
+			result.results.documents[0].partialMatches.should.equal(0);		
+		});		
+			
+	});		
+		
+	describe('Search for "nya"', function () {		
+			
+		var result = thinker.find("nya");		
+		
+		it('Should return one expression', function () {			
+			result.results.expressions.length.should.equal(1);		
+		});		
+		
+		it('Expression interpretation should equal "ny"', function () {		
+			result.results.expressions[0].interpretation.should.equal("ny");		
+		});		
+		
+		it('Should return one document', function () {		
+			result.results.documents.length.should.equal(1);		
+		});		
+		
+		it('The result should be a direct match on the first result', function () {		
+			result.results.documents[0].directMatches.should.equal(1);		
+			result.results.documents[0].partialMatches.should.equal(0);		
+		});		
+			
+	});		
+		
+	describe('Search for "radioar"', function () {		
+			
+		var result = thinker.find("radioar");		
+		
+		it('Expression interpretation should equal "radio"', function () {		
+			result.results.expressions[0].interpretation.should.equal("radio");		
+		});		
+			
+	});		
+		
+	describe('Search for "sprit"', function () {		
+			
+		var result = thinker.find("sprit");		
+		
+		it('Expression interpretation should equal "sprit"', function () {		
+			result.results.expressions[0].interpretation.should.equal("sprit");		
+		});		
+			
+	});		
+		
+	describe('Search for "produktutveckling"', function () {		
+			
+		var result = thinker.find("produktutveckling");		
+		
+		it('Expression interpretation should equal "produktutveckl"', function () {		
+			result.results.expressions[0].interpretation.should.equal("produktutveckl");		
+		});		
+			
+	});		
+		
+	describe('Search for "produktutvecklare"', function () {		
+			
+		var result = thinker.find("produktutvecklare");		
+		
+		it('Expression interpretation should equal "produktutveckl"', function () {		
+			result.results.expressions[0].interpretation.should.equal("produktutveckl");		
+		});		
+			
+	});		
+		
+	describe('Search for "produktutvecklarens"', function () {		
+			
+		var result = thinker.find("produktutvecklarens");		
+		
+		it('Expression interpretation should equal "produktutveckl"', function () {		
+			result.results.expressions[0].interpretation.should.equal("produktutveckl");		
+		});		
+			
+	});		
+		
+	describe('Search for "skrotverktyget"', function () {		
+			
+		var result = thinker.find("skrotverktyget");		
+		
+		it('Expression interpretation should equal "skrotverktyg"', function () {		
+			result.results.expressions[0].interpretation.should.equal("skrotverktyg");		
+		});		
+			
+	});		
+		
+		
+	describe('Search for "skrotverktygets"', function () {		
+			
+		var result = thinker.find("skrotverktygets");		
+		
+		
+		it('Expression interpretation should equal "skrotverktyg"', function () {		
+			result.results.expressions[0].interpretation.should.equal("skrotverktyg");		
+		});		
+			
+	});		
+		
+	describe('Search for "sandning"', function () {		
+			
+		var result = thinker.find("sandning");		
+		
+		it('Expression interpretation should equal "sand"', function () {		
+			result.results.expressions[0].interpretation.should.equal("sand");		
+		});		
+			
+	});		
+		
+	describe('Search for "sand"', function () {		
+			
+		var result = thinker.find("sand");		
+		
+		it('Expression interpretation should equal "sand"', function () {		
+			result.results.expressions[0].interpretation.should.equal("sand");		
+		});		
+			
+	});		
+		
+	describe('Search for "sandarens"', function () {		
+			
+		var result = thinker.find("sandarens");		
+		
+		it('Expression interpretation should equal "sand"', function () {		
+			result.results.expressions[0].interpretation.should.equal("sand");		
+		});		
+			
+	});		
+		
+		
+	describe('Search for "skrotverktyg"', function () {		
+			
+		var result = thinker.find("skrotverktyg");		
+		
+		it('Expression interpretation should equal "skrotverktyg"', function () {		
+			result.results.expressions[0].interpretation.should.equal("skrotverktyg");		
+		});		
+			
+	});		
+		
+	describe('Search for "inbyggda"', function () {		
+			
+		var result = thinker.find("inbyggda");		
+		
+		it('Expression interpretation should equal "inbygg"', function () {		
+			result.results.expressions[0].interpretation.should.equal("inbygg");		
+		});		
+			
+	});		
+		
+	describe('Search for "inbyggd"', function () {		
+			
+		var result = thinker.find("inbyggd");		
+		
+		it('Expression interpretation should equal "inbygg"', function () {		
+			result.results.expressions[0].interpretation.should.equal("inbygg");		
+		});		
+			
+	});		
+		
+	describe('Search for "antikviteten"', function () {		
+			
+		var result = thinker.find("antikviteten");		
+		
+		it('Should return one expression', function () {			
+			result.results.expressions.length.should.equal(1);		
+		});		
+		
+		it('Expression interpretation should equal "antikv"', function () {		
+			result.results.expressions[0].interpretation.should.equal("antikv");		
+		});		
+		
+		it('Should return one result (antikviteten, antivitet, antikvitets)', function () {		
+			result.results.documents.length.should.equal(3);		
+		});		
+		
+		it('All results should be a direct match', function () {		
+			result.results.documents[0].directMatches.should.equal(1);		
+			result.results.documents[0].partialMatches.should.equal(0);		
+			result.results.documents[1].directMatches.should.equal(1);		
+			result.results.documents[1].partialMatches.should.equal(0);		
+			result.results.documents[2].directMatches.should.equal(1);		
+			result.results.documents[2].partialMatches.should.equal(0);		
+		});		
+			
+	});
+});
+
+describe('Word processor: English stemmer', function () {
+
+	var thinker 	= Thinker();
+	var ranker 		= Thinker.rankers.standard();
+	var stemmer 	= Thinker.processors.stemmers.english();
+
+	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
+
+	thinker.addWordProcessor(stemmer);
+	thinker.ranker = ranker;
+
+	thinker.feed(exampleTextsCopy);
+
+	describe('Search for "considerable"', function () {	
+		var result = thinker.find("considerable");
+
+		it('Should be interpreted as "consider"', function () {	
+			result.results.expressions[0].interpretation.should.equal("consider");
+		});
+
+	});
+
+	describe('Search for "triplicate"', function () {	
+		var result = thinker.find("triplicate");
+
+		it('Should be interpreted as "triplic"', function () {	
+			result.results.expressions[0].interpretation.should.equal("triplic");
+		});
+
+	});
+
+	describe('Search for "dependent"', function () {	
+		var result = thinker.find("dependent");
+
+		it('Should be interpreted as "depend"', function () {	
+			result.results.expressions[0].interpretation.should.equal("depend");
+		});
+
+	});
+
+	describe('Search for "probate"', function () {	
+		var result = thinker.find("probate");
+
+		it('Should be interpreted as "probat"', function () {	
+			result.results.expressions[0].interpretation.should.equal("probat");
+		});
+
+	});
+
+	describe('Search for "controllable"', function () {	
+		var result = thinker.find("controllable");
+
+		it('Should be interpreted as "control"', function () {	
+			result.results.expressions[0].interpretation.should.equal("control");
+		});
+
+	});
+
+	describe('Search for "rolling"', function () {	
+		var result = thinker.find("rolling");
+
+		it('Should be interpreted as "roll"', function () {	
+			result.results.expressions[0].interpretation.should.equal("roll");
+		});
+
+	});
+	
 });
 
 describe('Field processor: HTML-Stripper', function () {
