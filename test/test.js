@@ -95,7 +95,7 @@ describe('Stemmer', function () {
 	thinker.ranker = ranker;
 
 	thinker.feed(exampleTextsCopy, {
-		characters: /[^a-zA-Z0-9åäöÅÄÖ']/g
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
 	});
 
 	describe('Search for stopword "anders"', function () {	
@@ -134,7 +134,7 @@ describe('Partial match', function () {
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 
 	thinker.feed(exampleTextsCopy, {
-		characters: /[^a-zA-Z0-9åäöÅÄÖ']/g
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
 	});
 
 	describe('Search for "emöt"', function () {	
@@ -171,7 +171,7 @@ describe('Partial match with minimum word length match 5', function () {
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	thinker.feed(JSON.parse(JSON.stringify(exampleTexts)), {
-		characters: /[^a-zA-Z0-9åäöÅÄÖ']/g,
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g,
 		minWildcardWordLen: 5
 	});
 
@@ -211,7 +211,7 @@ describe('Ranker', function () {
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 
 	thinker.feed(exampleTextsCopy, {
-		characters: /[^a-zA-Z0-9åäöÅÄÖ']/g
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
 	});
 
 	describe('Basic search "artikel"', function () {	
@@ -280,7 +280,7 @@ describe('Advanced ranker', function () {
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 
 	thinker.feed(exampleTextsCopy, {
-		characters: /[^a-zA-Z0-9åäöÅÄÖ']/g
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
 	});
 
 	describe('Basic search "artikel"', function () {	
@@ -341,7 +341,7 @@ describe('Suggestion', function () {
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 
 	thinker.feed(exampleTextsCopy, {
-		characters: /[^a-zA-Z0-9åäöÅÄÖ']/g
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
 	});
 
 	describe('Search "liaså"', function () {	
@@ -372,7 +372,7 @@ describe('Word-processor: Stopwords', function () {
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 
 	thinker.feed(exampleTextsCopy, {
-		characters: /[^a-zA-Z0-9åäöÅÄÖ']/g
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
 	});
 
 	describe('Basic search "Bemötande"', function () {	
@@ -401,7 +401,7 @@ describe('Word-processor: Multiples', function () {
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 	thinker.feed(exampleTextsCopy, {
-		characters: /[^a-zA-Z0-9åäöÅÄÖ']/g
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
 	});
 
 	describe('Search "KaaalLlle"', function () {
@@ -443,7 +443,7 @@ describe('Field processor: HTML-Stripper', function () {
 	];
 
 	thinker.feed(exampleHtml, {
-		characters: /[^a-zA-Z0-9åäöÅÄÖ']/g
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
 	});
 
 	describe('Search "title"', function () {
