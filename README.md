@@ -50,38 +50,38 @@ var result = thinker.find('ut in');
 
 // Show result
 console.log(result);
-/* 
-	{
-		expressions: [
-			{
-				interpretation: 'ut',
-				original: 'ut',
-				suggestion: undefined,
-				exactMode: false,
-				hits: [/* wierd array of data containing all hits to this expression */]
-			},
-			{
-				interpretation: 'in',
-				original: 'in',
-				suggestion: undefined,
-				exactMode: false,
-				hits: [/* ... */]
-			}
-		],
-		documents: [
-			{
-				id: 1,
-				weight: 12,
-				expressions: [1,0]	// <- Array where index 0 correspods to first expression, 
-									// 1 to second expression etc. 
-									// Value is 2 for exact match
-									// 1 for partial match and 0 for no match
-			}
-		],
-		findTime: 0.908248, // ms
-		rankTime: 0.109632 // ms
-	}
-*/
+
+{
+	expressions: [
+		{
+			interpretation: 'ut',
+			original: 'ut',
+			suggestion: undefined,
+			exactMode: false,
+			hits: [/* wierd array of data containing all hits to this expression */]
+		},
+		{
+			interpretation: 'in',
+			original: 'in',
+			suggestion: undefined,
+			exactMode: false,
+			hits: [/* ... */]
+		}
+	],
+	documents: [
+		{
+			id: 1,
+			weight: 12,
+			expressions: [1,0]	// <- Array where index 0 correspods to first expression, 
+								// 1 to second expression etc. 
+								// Value is 2 for exact match
+								// 1 for partial match and 0 for no match
+		}
+	],
+	findTime: 0.908248, // ms
+	rankTime: 0.109632 // ms
+}
+
 ```
 
 Please not that you _have to_ connect a ranker, else find won't provide a result set. The ranker build the result set.
