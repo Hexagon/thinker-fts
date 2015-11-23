@@ -46,18 +46,40 @@ thinker.feed([
 ]);
 
 // Search for text
-var result = thinker.find('ut');
+var result = thinker.find('ut in');
 
 // Show result
 console.log(result);
 /* 
 	{
-		results: {
-			expressions: [...]
-			documents: [... ]
-		},
-		findTime: 1.208248, // ms
-		rankTime: 1.109632 // ms
+		expressions: [
+			{
+				interpretation: 'ut',
+				original: 'ut',
+				suggestion: undefined,
+				exactMode: false,
+				hits: [/* wierd array of data containing all hits to this expression */]
+			},
+			{
+				interpretation: 'in',
+				original: 'in',
+				suggestion: undefined,
+				exactMode: false,
+				hits: [/* ... */]
+			}
+		],
+		documents: [
+			{
+				id: 1,
+				weight: 12,
+				expressions: [1,0]	// <- Array where index 0 correspods to first expression, 
+									// 1 to second expression etc. 
+									// Value is 2 for exact match
+									// 1 for partial match and 0 for no match
+			}
+		],
+		findTime: 0.908248, // ms
+		rankTime: 0.109632 // ms
 	}
 */
 ```
@@ -126,6 +148,7 @@ If this is enabled, thinker will use unprocessed words from the inputted texts t
 
 This is what results.expressions[n] will look like when you search for 'exression' (missing p)
 
+
 ```javascript 
 {
 	interpretation: 'exression',
@@ -144,11 +167,11 @@ var thinker = Thinker(),
 	ranker = Thinker.rankers.standard({
 		directHit: 1,
 		partialHit: 0.5,
-		allExpressionFactor: 3,
-		allDirectExpressionFactor: 6,
+		eachPartialExpressionFactor: 1.5,
+		eachDirectExpressionFactor: 2,
 		fields: {
-			1: 4,
-			2: 2
+			1: { weight: 4, boostPercentage: false },
+			2: { weight: 2, boostPercentage: false }
 		}
 	});
 
@@ -159,13 +182,13 @@ thinker.ranker = ranker;
 
 Factor to weight when an expression match a word directly resp. partially
 
-#### allExpressionFactor
+#### eachPartialExpressionFactor
 
-Factor which is applied to a documents total weight when all expressions give a match, partially or directly does not matter.
+Factor which is applied to a documents total weight when a expressions give a partial match. If the query consist of three expressions that all match partially this factor will be applied three times.
 
-#### allDirectExpressionFactor
+#### eachDirectExpressionFactor
 
-Factor which is applied to a documents total weight when all expressions give a direct/exact match. Both this and the above should be set fairly high to ensure documents with good matches get close to top in the result set.
+Same as above, but with direct hits.
 
 #### fields
 
@@ -182,14 +205,25 @@ and your fields weights look like
 
 ```javascript
 fields: {
-	1: 4,
-	2: 2,
-	3: 2
+	1: { weight: 4, boostPercentage: true },
+	2: { weight: 2, boostPercentage: false },
+	3: { weight: 2, boostPercentage: false }
 }
 ```
 
-Matches in the title field would get a weight of four, matches in the ingress field would get a weight of two etc.
+Matches in the title field would get a weight of four, matches in the ingress field would get a weight of two etc. 
 
+Additionally, as boostPercentage is set to true for title, that weight can get up to it's double if the match is the only word in the title. 
+
+For example, if the title is 'This is the stuff', and we search for 'stuff', the base weight is four, and that is multiplied by a calculated factor 
+
+1 word matched, 4 words totally
+=
+1+1/4
+=
+1+0.25
+=
+1.25
 
 ## Field processors
 

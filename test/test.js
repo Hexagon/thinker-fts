@@ -49,33 +49,31 @@ describe('Simple usage', function () {
 
 		// The second expressin is ignored as default minWordLength is 2
 		it('Should return one expression', function () {	
-			result.results.expressions.length.should.equal(1);
+			result.expressions.length.should.equal(1);
 		});
 
 		it('Expression interpretation should equal "artikel"', function () {
-			result.results.expressions[0].interpretation.should.equal("artikel");
+			result.expressions[0].interpretation.should.equal("artikel");
 		});
 
 		it('Should return two results', function () {
-			result.results.documents.length.should.equal(2);
+			result.documents.length.should.equal(2);
 		});
 
 		it('First result should have id 0', function () {
-			result.results.documents[0].documentId.should.equal(0);
+			result.documents[0].id.should.equal(0);
 		});
 
 		it('First result should be an direct match', function () {
-			result.results.documents[0].directMatches.should.equal(1);
-			result.results.documents[0].partialMatches.should.equal(0);
+			result.documents[0].expressions[0].should.equal(2);
 		});
 
 		it('Second result should have id 2', function () {
-			result.results.documents[1].documentId.should.equal(2);
+			result.documents[1].id.should.equal(2);
 		});
 
 		it('Second result should be an partial match', function () {
-			result.results.documents[1].directMatches.should.equal(0);
-			result.results.documents[1].partialMatches.should.equal(1);
+			result.documents[1].expressions[0].should.equal(1);
 		});
 	});
 });
@@ -94,11 +92,11 @@ describe('Simple usage', function () {
 
 		// The second expressin is ignored as default minWordLength is 2
 		it('Should return one expression', function () {	
-			result.results.expressions.length.should.equal(1);
+			result.expressions.length.should.equal(1);
 		});
 
 		it('Expression interpretation should equal "ånglok"', function () {
-			result.results.expressions[0].interpretation.should.equal("ånglok");
+			result.expressions[0].interpretation.should.equal("ånglok");
 		});
 
 	});
@@ -120,24 +118,21 @@ describe('Partial match', function () {
 		var result = thinker.find("emöt");
 
 		it('Should return one expression', function () {	
-			result.results.expressions.length.should.equal(1);
+			result.expressions.length.should.equal(1);
 		});
 
 		it('Expression interpretation should equal "emöt"', function () {
-			result.results.expressions[0].interpretation.should.equal("emöt");
+			result.expressions[0].interpretation.should.equal("emöt");
 		});
 
 		it('Should return three results (bemötandet, bemötande, bemött)', function () {
-			result.results.documents.length.should.equal(3);
+			result.documents.length.should.equal(3);
 		});
 
 		it('All results should be a partial match', function () {
-			result.results.documents[0].directMatches.should.equal(0);
-			result.results.documents[0].partialMatches.should.equal(1);
-			result.results.documents[1].directMatches.should.equal(0);
-			result.results.documents[1].partialMatches.should.equal(1);
-			result.results.documents[2].directMatches.should.equal(0);
-			result.results.documents[2].partialMatches.should.equal(1);
+			result.documents[0].expressions[0].should.equal(1);
+			result.documents[1].expressions[0].should.equal(1);
+			result.documents[2].expressions[0].should.equal(1);
 		});
 	});
 });
@@ -158,15 +153,15 @@ describe('Partial match with minimum word length match 5', function () {
 		var result = thinker.find('emöt');
 
 		it('Should return one expression', function () {	
-			result.results.expressions.length.should.equal(1);
+			result.expressions.length.should.equal(1);
 		});
 
 		it('Expression interpretation should equal "emöt"', function () {
-			result.results.expressions[0].interpretation.should.equal("emöt");
+			result.expressions[0].interpretation.should.equal("emöt");
 		});
 
 		it('Should return zero results', function () {
-			result.results.documents.length.should.equal(0);
+			result.documents.length.should.equal(0);
 		});
 	});
 });
@@ -176,11 +171,11 @@ describe('Ranker', function () {
 		ranker = Thinker.rankers.standard({
 			directHit: 1,
 			partialHit: 0.5,
-			allExpressionFactor: 3,
-			allDirectExpressionFactor: 6,
+			eachPartialExpressionFactor: 1.5,
+			eachDirectExpressionFactor: 2,
 			fields: {
-				1: 4,
-				2: 2
+				1: { weight: 4},
+				2: { weight: 2}
 			}
 		});
 
@@ -197,61 +192,57 @@ describe('Ranker', function () {
 		var result = thinker.find("artikel");
 
 		it('Should return two results', function () {
-			result.results.documents.length.should.equal(2);
+			result.documents.length.should.equal(2);
 		});
 
 		describe('Result order', function () {
 			it('First result should have id 0', function () {
-				result.results.documents[0].documentId.should.equal(0);
+				result.documents[0].id.should.equal(0);
 
 			});
 
 			it('Second result should have id 2', function () {
-				result.results.documents[1].documentId.should.equal(2);
+				result.documents[1].id.should.equal(2);
 
 			});
 		});
 
 		describe('Result type', function () {
 			it('First result should be direct', function () {
-				result.results.documents[0].partialMatches.should.equal(0);
-				result.results.documents[0].directMatches.should.equal(1);
+				result.documents[0].expressions[0].should.equal(2);
 
 			});
 
 			it('Second result should be partial', function () {
-				result.results.documents[1].directMatches.should.equal(0);
-				result.results.documents[1].partialMatches.should.equal(1);
-
+				result.documents[1].expressions[0].should.equal(1);
 			});
 		});
 
 		describe('Result weight', function () {
-			it('First result should have a weight of 4*1*6', function () {
-				result.results.documents[0].totalWeight.should.equal(24);
-
+			it('First result should have a weight of 4*1*2', function () {
+				result.documents[0].weight.should.equal(8);
 			});
 
-			it('Second result should have a weight of 2*0.5*3', function () {
-				result.results.documents[1].totalWeight.should.equal(3);
-
+			it('Second result should have a weight of 2*0.5*1.5', function () {
+				result.documents[1].weight.should.equal(1.5);
 			});
 		});
 	});
 });
 
-describe('Advanced ranker', function () {
-	var thinker = Thinker();
-	var ranker = Thinker.rankers.standard({
-		directHit: 1,
-		partialHit: 0.5,
-		allExpressionFactor: 3,
-		allDirectExpressionFactor: 6,
-		fields: {
-			1: 4,
-			2: 2
-		}
-	});
+
+describe('Ranker: Boost percentage', function () {
+	var thinker = Thinker(),
+		ranker = Thinker.rankers.standard({
+			directHit: 1,
+			partialHit: 0.5,
+			eachPartialExpressionFactor: 1.5,
+			eachDirectExpressionFactor: 2,
+			fields: {
+				1: { weight: 4, boostPercentage: true},
+				2: { weight: 2}
+			}
+		});
 
 	thinker.ranker = ranker;
 
@@ -263,47 +254,87 @@ describe('Advanced ranker', function () {
 	});
 
 	describe('Basic search "artikel"', function () {	
+		var result = thinker.find("artikel");
+
+		it('Should return two results', function () {
+			result.documents.length.should.equal(2);
+		});
+
+		describe('Result weight', function () {
+			it('First result should have a weight of 4*1*2*1.3333', function () {
+				result.documents[0].weight.toFixed(4).should.equal('10.6667');
+			});
+
+			it('Second result should have a weight of 2*0.5*1.5', function () {
+				result.documents[1].weight.should.equal(1.5);
+			});
+		});
+	});
+});
+
+describe('Advanced ranker', function () {
+	var thinker = Thinker({
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
+	});
+	var ranker = Thinker.rankers.standard({
+		directHit: 1,
+		partialHit: 0.5,			
+		eachPartialExpressionFactor: 1.5,
+		eachDirectExpressionFactor: 2,
+		fields: {
+			1: {weight: 4 },
+			2: {weight: 2 }
+		}
+	});
+
+	thinker.ranker = ranker;
+
+	// We need to make a copy of exampletexts, as feed consumes the object
+	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
+
+	thinker.feed(exampleTextsCopy);
+
+	describe('Basic search "artikel"', function () {	
 		var result = thinker.find("artikel anders namn");
 
 		it('Should return two results', function () {
-			result.results.documents.length.should.equal(2);
+			result.documents.length.should.equal(2);
 		});
 
 		describe('Result order', function () {
 			it('First result should have id 0', function () {
-				result.results.documents[0].documentId.should.equal(0);
+				result.documents[0].id.should.equal(0);
 
 			});
 
 			it('Second result should have id 2', function () {
-				result.results.documents[1].documentId.should.equal(2);
+				result.documents[1].id.should.equal(2);
 
 			});
 		});
 
 		describe('Result type', function () {
 			it('First result should be 3 direct matches', function () {
-				result.results.documents[0].partialMatches.should.equal(0);
-				result.results.documents[0].directMatches.should.equal(3);
-
+				result.documents[0].expressions[0].should.equal(2);
+				result.documents[0].expressions[1].should.equal(2);
+				result.documents[0].expressions[2].should.equal(2);
 			});
 
 			it('Second result should be 2 partial and one direct', function () {
-				result.results.documents[1].directMatches.should.equal(1);
-				result.results.documents[1].partialMatches.should.equal(2);
-
+				result.documents[1].expressions[0].should.equal(1);
+				result.documents[1].expressions[1].should.equal(1);
+				result.documents[1].expressions[2].should.equal(2);
 			});
 		});
 
 		describe('Result weight', function () {
-			it('First result should have a weight of ((4*1)+(2*1)+(2*1))*6', function () {
-				result.results.documents[0].totalWeight.should.equal(48);
+			it('First result should have a weight of (((4*1)+(2*1)+(2*1)))*2*2*2', function () {
+				result.documents[0].weight.should.equal(64);
 
 			});
 
-			it('Second result should have a weight of ((2*0.5)+(2*0.5)+(2*1))*3', function () {
-				result.results.documents[1].totalWeight.should.equal(12);
-
+			it('Second result should have a weight of (((2*0.5)+(2*0.5)+(2*1)))*2*1.5*1.5', function () {
+				result.documents[1].weight.should.equal(18);
 			});
 		});
 	});
@@ -327,11 +358,11 @@ describe('Suggestion', function () {
 		var result = thinker.find("liaså");
 
 		it('Should return one expression', function () {
-			result.results.expressions.length.should.equal(1);
+			result.expressions.length.should.equal(1);
 		});
 
 		it('Should return "likaså" as suggestion', function () {
-			result.results.expressions[0].suggestion.should.equal('likaså');
+			result.expressions[0].suggestion.should.equal('likaså');
 		});
 	});
 });
@@ -358,11 +389,11 @@ describe('Word-processor: Stopwords', function () {
 		var result = thinker.find("bemötande");
 
 		it('Should return zero expressions', function () {
-			result.results.expressions.length.should.equal(0);
+			result.expressions.length.should.equal(0);
 		});
 
 		it('Should return zero documents', function () {
-			result.results.documents.length.should.equal(0);
+			result.documents.length.should.equal(0);
 		});
 	});
 });
@@ -387,7 +418,7 @@ describe('Word-processor: Multiples', function () {
 		var result = thinker.find("KaaalLlle");
 
 		it('Should return one result', function () {
-			result.results.documents.length.should.equal(1);
+			result.documents.length.should.equal(1);
 		});
 	});
 
@@ -395,7 +426,7 @@ describe('Word-processor: Multiples', function () {
 		var result = thinker.find("kallle");
 
 		it('Should return zero result', function () {
-			result.results.documents.length.should.equal(0);
+			result.documents.length.should.equal(0);
 		});
 	});
 
@@ -403,7 +434,7 @@ describe('Word-processor: Multiples', function () {
 		var result = thinker.find("k000aaaallle");
 
 		it('Expression interpretation should equal "k000ale"', function () {
-			result.results.expressions[0].interpretation.should.equal("k000ale");
+			result.expressions[0].interpretation.should.equal("k000ale");
 		});
 	});
 });
@@ -431,25 +462,23 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("anders");
 
 		it('Should return one expression', function () {	
-			result.results.expressions.length.should.equal(1);
+			result.expressions.length.should.equal(1);
 		});
 
 		it('Expression interpretation be unchanged("anders")', function () {
-			result.results.expressions[0].interpretation.should.equal("anders");
+			result.expressions[0].interpretation.should.equal("anders");
 		});
 
 		it('Should return two results', function () {
-			result.results.documents.length.should.equal(2);
+			result.documents.length.should.equal(2);
 		});
 
 		it('First result should be a direct match (anders)', function () {
-			result.results.documents[0].directMatches.should.equal(1);
-			result.results.documents[0].partialMatches.should.equal(0);
+			result.documents[0].expressions[0].should.equal(2);
 		});
 
 		it('Second result should be a partial match (andersson)', function () {
-			result.results.documents[1].directMatches.should.equal(0);
-			result.results.documents[1].partialMatches.should.equal(1);
+			result.documents[1].expressions[0].should.equal(1);
 		});
 	});
 
@@ -458,24 +487,21 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("Bemötas");		
 		
 		it('Should return one expression', function () {			
-			result.results.expressions.length.should.equal(1);		
+			result.expressions.length.should.equal(1);		
 		});		
 		
 		it('Expression interpretation should equal "bemöt"', function () {		
-			result.results.expressions[0].interpretation.should.equal("bemöt");		
+			result.expressions[0].interpretation.should.equal("bemöt");		
 		});		
 		
 		it('Should return three results (bemötandet, bemötande, bemött)', function () {		
-			result.results.documents.length.should.equal(3);		
+			result.documents.length.should.equal(3);		
 		});		
 		
 		it('All results should be a direct match', function () {		
-			result.results.documents[0].directMatches.should.equal(1);		
-			result.results.documents[0].partialMatches.should.equal(0);		
-			result.results.documents[1].directMatches.should.equal(1);		
-			result.results.documents[1].partialMatches.should.equal(0);		
-			result.results.documents[2].directMatches.should.equal(1);		
-			result.results.documents[2].partialMatches.should.equal(0);		
+			result.documents[0].expressions[0].should.equal(2);		
+			result.documents[1].expressions[0].should.equal(2);		
+			result.documents[2].expressions[0].should.equal(2);		
 		});		
 			
  	});
@@ -485,43 +511,41 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("nyheternas");		
 		
 		it('Should return one expression', function () {			
-			result.results.expressions.length.should.equal(1);		
+			result.expressions.length.should.equal(1);		
 		});		
 		
 		it('Expression interpretation should equal "nyhet"', function () {		
-			result.results.expressions[0].interpretation.should.equal("nyhet");		
+			result.expressions[0].interpretation.should.equal("nyhet");		
 		});		
 		
 		it('Should return 1 document', function () {		
-			result.results.documents.length.should.equal(1);		
+			result.documents.length.should.equal(1);		
 		});		
 		
 		it('All four (nyhet, nyheter, nyheten, nyhetens)results should be a direct match on the first result', function () {		
-			result.results.documents[0].directMatches.should.equal(4);		
-			result.results.documents[0].partialMatches.should.equal(0);		
+			result.documents[0].expressions[0].should.equal(2);
 		});		
 			
 	});		
-		
+
 	describe('Search for "nya"', function () {		
 			
 		var result = thinker.find("nya");		
 		
 		it('Should return one expression', function () {			
-			result.results.expressions.length.should.equal(1);		
+			result.expressions.length.should.equal(1);		
 		});		
 		
 		it('Expression interpretation should equal "ny"', function () {		
-			result.results.expressions[0].interpretation.should.equal("ny");		
+			result.expressions[0].interpretation.should.equal("ny");		
 		});		
 		
 		it('Should return one document', function () {		
-			result.results.documents.length.should.equal(1);		
+			result.documents.length.should.equal(1);		
 		});		
 		
 		it('The result should be a direct match on the first result', function () {		
-			result.results.documents[0].directMatches.should.equal(1);		
-			result.results.documents[0].partialMatches.should.equal(0);		
+			result.documents[0].expressions[0].should.equal(2);	
 		});		
 			
 	});		
@@ -531,7 +555,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("radioar");		
 		
 		it('Expression interpretation should equal "radio"', function () {		
-			result.results.expressions[0].interpretation.should.equal("radio");		
+			result.expressions[0].interpretation.should.equal("radio");		
 		});		
 			
 	});		
@@ -541,7 +565,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("sprit");		
 		
 		it('Expression interpretation should equal "sprit"', function () {		
-			result.results.expressions[0].interpretation.should.equal("sprit");		
+			result.expressions[0].interpretation.should.equal("sprit");		
 		});		
 			
 	});		
@@ -551,7 +575,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("produktutveckling");		
 		
 		it('Expression interpretation should equal "produktutveckl"', function () {		
-			result.results.expressions[0].interpretation.should.equal("produktutveckl");		
+			result.expressions[0].interpretation.should.equal("produktutveckl");		
 		});		
 			
 	});		
@@ -561,7 +585,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("produktutvecklare");		
 		
 		it('Expression interpretation should equal "produktutveckl"', function () {		
-			result.results.expressions[0].interpretation.should.equal("produktutveckl");		
+			result.expressions[0].interpretation.should.equal("produktutveckl");		
 		});		
 			
 	});		
@@ -571,7 +595,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("produktutvecklarens");		
 		
 		it('Expression interpretation should equal "produktutveckl"', function () {		
-			result.results.expressions[0].interpretation.should.equal("produktutveckl");		
+			result.expressions[0].interpretation.should.equal("produktutveckl");		
 		});		
 			
 	});		
@@ -581,7 +605,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("skrotverktyget");		
 		
 		it('Expression interpretation should equal "skrotverktyg"', function () {		
-			result.results.expressions[0].interpretation.should.equal("skrotverktyg");		
+			result.expressions[0].interpretation.should.equal("skrotverktyg");		
 		});		
 			
 	});		
@@ -593,7 +617,7 @@ describe('Word processor: Swedish stemmer', function () {
 		
 		
 		it('Expression interpretation should equal "skrotverktyg"', function () {		
-			result.results.expressions[0].interpretation.should.equal("skrotverktyg");		
+			result.expressions[0].interpretation.should.equal("skrotverktyg");		
 		});		
 			
 	});		
@@ -603,7 +627,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("sandning");		
 		
 		it('Expression interpretation should equal "sand"', function () {		
-			result.results.expressions[0].interpretation.should.equal("sand");		
+			result.expressions[0].interpretation.should.equal("sand");		
 		});		
 			
 	});		
@@ -613,7 +637,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("sand");		
 		
 		it('Expression interpretation should equal "sand"', function () {		
-			result.results.expressions[0].interpretation.should.equal("sand");		
+			result.expressions[0].interpretation.should.equal("sand");		
 		});		
 			
 	});		
@@ -623,7 +647,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("sandarens");		
 		
 		it('Expression interpretation should equal "sand"', function () {		
-			result.results.expressions[0].interpretation.should.equal("sand");		
+			result.expressions[0].interpretation.should.equal("sand");		
 		});		
 			
 	});		
@@ -634,7 +658,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("skrotverktyg");		
 		
 		it('Expression interpretation should equal "skrotverktyg"', function () {		
-			result.results.expressions[0].interpretation.should.equal("skrotverktyg");		
+			result.expressions[0].interpretation.should.equal("skrotverktyg");		
 		});		
 			
 	});		
@@ -644,7 +668,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("inbyggda");		
 		
 		it('Expression interpretation should equal "inbygg"', function () {		
-			result.results.expressions[0].interpretation.should.equal("inbygg");		
+			result.expressions[0].interpretation.should.equal("inbygg");		
 		});		
 			
 	});		
@@ -654,7 +678,7 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("inbyggd");		
 		
 		it('Expression interpretation should equal "inbygg"', function () {		
-			result.results.expressions[0].interpretation.should.equal("inbygg");		
+			result.expressions[0].interpretation.should.equal("inbygg");		
 		});		
 			
 	});		
@@ -664,28 +688,23 @@ describe('Word processor: Swedish stemmer', function () {
 		var result = thinker.find("antikviteten");		
 		
 		it('Should return one expression', function () {			
-			result.results.expressions.length.should.equal(1);		
+			result.expressions.length.should.equal(1);		
 		});		
 		
 		it('Expression interpretation should equal "antikv"', function () {		
-			result.results.expressions[0].interpretation.should.equal("antikv");		
+			result.expressions[0].interpretation.should.equal("antikv");		
 		});		
 		
 		it('Should return one result (antikviteten, antivitet, antikvitets)', function () {		
-			result.results.documents.length.should.equal(3);		
+			result.documents.length.should.equal(3);		
 		});		
 		
 		it('All results should be a direct match', function () {		
-			result.results.documents[0].directMatches.should.equal(1);		
-			result.results.documents[0].partialMatches.should.equal(0);		
-			result.results.documents[1].directMatches.should.equal(1);		
-			result.results.documents[1].partialMatches.should.equal(0);		
-			result.results.documents[2].directMatches.should.equal(1);		
-			result.results.documents[2].partialMatches.should.equal(0);		
-		});		
-			
+			result.documents[0].expressions[0].should.equal(2);
+		});
 	});
 });
+
 
 describe('Word processor: English stemmer', function () {
 
@@ -704,7 +723,7 @@ describe('Word processor: English stemmer', function () {
 		var result = thinker.find("considerable");
 
 		it('Should be interpreted as "consider"', function () {	
-			result.results.expressions[0].interpretation.should.equal("consider");
+			result.expressions[0].interpretation.should.equal("consider");
 		});
 
 	});
@@ -713,7 +732,7 @@ describe('Word processor: English stemmer', function () {
 		var result = thinker.find("triplicate");
 
 		it('Should be interpreted as "triplic"', function () {	
-			result.results.expressions[0].interpretation.should.equal("triplic");
+			result.expressions[0].interpretation.should.equal("triplic");
 		});
 
 	});
@@ -722,7 +741,7 @@ describe('Word processor: English stemmer', function () {
 		var result = thinker.find("dependent");
 
 		it('Should be interpreted as "depend"', function () {	
-			result.results.expressions[0].interpretation.should.equal("depend");
+			result.expressions[0].interpretation.should.equal("depend");
 		});
 
 	});
@@ -731,7 +750,7 @@ describe('Word processor: English stemmer', function () {
 		var result = thinker.find("probate");
 
 		it('Should be interpreted as "probat"', function () {	
-			result.results.expressions[0].interpretation.should.equal("probat");
+			result.expressions[0].interpretation.should.equal("probat");
 		});
 
 	});
@@ -740,7 +759,7 @@ describe('Word processor: English stemmer', function () {
 		var result = thinker.find("controllable");
 
 		it('Should be interpreted as "control"', function () {	
-			result.results.expressions[0].interpretation.should.equal("control");
+			result.expressions[0].interpretation.should.equal("control");
 		});
 
 	});
@@ -749,7 +768,7 @@ describe('Word processor: English stemmer', function () {
 		var result = thinker.find("rolling");
 
 		it('Should be interpreted as "roll"', function () {	
-			result.results.expressions[0].interpretation.should.equal("roll");
+			result.expressions[0].interpretation.should.equal("roll");
 		});
 
 	});
@@ -777,7 +796,7 @@ describe('Field processor: HTML-Stripper', function () {
 		var result = thinker.find("title");
 
 		it('Should return one result', function () {
-			result.results.documents.length.should.equal(1);
+			result.documents.length.should.equal(1);
 		});
 	});
 
@@ -785,7 +804,7 @@ describe('Field processor: HTML-Stripper', function () {
 		var result = thinker.find("htmlcomment");
 
 		it('Should return zero results', function () {
-			result.results.documents.length.should.equal(0);
+			result.documents.length.should.equal(0);
 		});
 	});
 
@@ -793,7 +812,7 @@ describe('Field processor: HTML-Stripper', function () {
 		var result = thinker.find("scriptcontent");
 
 		it('Should return zero results', function () {
-			result.results.documents.length.should.equal(0);
+			result.documents.length.should.equal(0);
 		});
 	});
 
@@ -801,7 +820,7 @@ describe('Field processor: HTML-Stripper', function () {
 		var result = thinker.find("stylecontent");
 
 		it('Should return zero results', function () {
-			result.results.documents.length.should.equal(0);
+			result.documents.length.should.equal(0);
 		});
 	});
 
@@ -809,7 +828,7 @@ describe('Field processor: HTML-Stripper', function () {
 		var result = thinker.find("atitle");
 
 		it('Should return one results', function () {
-			result.results.documents.length.should.equal(1);
+			result.documents.length.should.equal(1);
 		});
 	});
 
@@ -817,7 +836,7 @@ describe('Field processor: HTML-Stripper', function () {
 		var result = thinker.find("imgdescription");
 
 		it('Should return one results', function () {
-			result.results.documents.length.should.equal(1);
+			result.documents.length.should.equal(1);
 		});
 	});
 
@@ -825,7 +844,7 @@ describe('Field processor: HTML-Stripper', function () {
 		var result = thinker.find("http");
 
 		it('Should return one results', function () {
-			result.results.documents.length.should.equal(1);
+			result.documents.length.should.equal(1);
 		});
 	});
 
@@ -833,7 +852,7 @@ describe('Field processor: HTML-Stripper', function () {
 		var result = thinker.find("fakeunclosedtag");
 
 		it('Should return zero results', function () {
-			result.results.documents.length.should.equal(0);
+			result.documents.length.should.equal(0);
 		});
 	});
 
@@ -841,7 +860,7 @@ describe('Field processor: HTML-Stripper', function () {
 		var result = thinker.find("aword");
 
 		it('Should return one result', function () {
-			result.results.documents.length.should.equal(1);
+			result.documents.length.should.equal(1);
 		});
 	});
 
@@ -849,7 +868,7 @@ describe('Field processor: HTML-Stripper', function () {
 		var result = thinker.find("årsringar");
 
 		it('Should return one result', function () {
-			result.results.documents.length.should.equal(1);
+			result.documents.length.should.equal(1);
 		});
 	});
 
@@ -857,7 +876,7 @@ describe('Field processor: HTML-Stripper', function () {
 		var result = thinker.find("innanför");
 
 		it('Should return one result', function () {
-			result.results.documents.length.should.equal(1);
+			result.documents.length.should.equal(1);
 		});
 	});
 });
