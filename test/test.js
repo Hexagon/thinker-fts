@@ -29,9 +29,9 @@ var should = require('should'),
 
 /* START OF EXAMPLE DATA */
 var exampleTexts = [
-	[0,"Artikel nummer noll","Det här är ettan i det hela, Anders är ett namn. Jonas likaså antikvitets. Bemötandet. effektivitet Kalle"],
-	[1,"Bemötande testtitel med extra ord","Brödtext nummer ett. Ander antikviteten"],
-	[2,"Titeln med extra Testning","Brödtext i sanden artikeln två. Bemött namn Andersson antikvitet nyhet, nyheter, nyheten, nyhetens, nya"],
+	[0,"Artikel nummer noll","Det här är ettan i det hela, Anders är ett namn. Jonas likaså antikvitets. Bemötandet. effektivitet Kalle olle lars"],
+	[1,"Bemötande testtitel med extra ord","Brödtext nummer ett. Ander antikviteten olle lars sven"],
+	[2,"Titeln med extra Testning","Brödtext i sanden artikeln två. Bemött namn Andersson antikvitet nyhet, nyheter, nyheten, nyhetens, nya olle"],
 ];
 
 /* END OF EXAMPLE DATA */
@@ -124,6 +124,45 @@ describe('Simple usage: Exact mode', function () {
 			result.expressions[0].interpretation.should.equal("ånglok");
 		});
 
+	});
+});
+
+describe('Simple usage: Modifiers', function () {
+	var thinker = Thinker({characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g});
+
+	thinker.ranker = Thinker.rankers.standard();
+
+	// We need to make a copy of exampletexts, as feed consumes the object
+	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
+	thinker.feed(exampleTextsCopy);
+
+	describe('olle +lars -sven', function () {	
+		var result = thinker.find("olle +lars -sven");
+
+		// The second expressin is ignored as default minWordLength is 2
+		it('Should return three expressions', function () {	
+			result.expressions.length.should.equal(3);
+		});
+
+		it('Expressions two should have + modifier', function () {	
+			result.expressions[1].modifier.should.equal("+");
+		});
+		
+		it('Expressions three should have - modifier', function () {	
+			result.expressions[2].modifier.should.equal("-");
+		});
+
+		it('Expression interpretation two should equal "lars"', function () {
+			result.expressions[1].interpretation.should.equal("lars");
+		});
+
+		it('Should return one result', function () {
+			result.documents.length.should.equal(1);
+		});
+
+		it('Should be document id 0', function () {
+			result.documents[0].id.should.equal(0);
+		});
 	});
 });
 
