@@ -80,6 +80,30 @@ describe('Simple usage', function () {
 	});
 });
 
+describe('Simple usage', function () {
+	var thinker = Thinker({characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g});
+
+	thinker.ranker = Thinker.rankers.standard();
+
+	// We need to make a copy of exampletexts, as feed consumes the object
+	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
+	thinker.feed(exampleTextsCopy);
+
+	describe('opts.characters', function () {	
+		var result = thinker.find("ånglok");
+
+		// The second expressin is ignored as default minWordLength is 2
+		it('Should return one expression', function () {	
+			result.results.expressions.length.should.equal(1);
+		});
+
+		it('Expression interpretation should equal "ånglok"', function () {
+			result.results.expressions[0].interpretation.should.equal("ånglok");
+		});
+
+	});
+});
+
 describe('Partial match', function () {
 	var thinker = Thinker();
 
@@ -286,7 +310,7 @@ describe('Advanced ranker', function () {
 });
 
 describe('Suggestion', function () {
-	var thinker = Thinker();
+	var thinker = Thinker({suggestionMinWordCount: 1});
 	var ranker = Thinker.rankers.standard();
 
 	thinker.enableSuggestions = true;

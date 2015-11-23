@@ -78,7 +78,8 @@ var thinker = Thinker({
 	minWildcardWordLen: 4,
 	maxWildcardWordLen: 32,
 	minWordLen: 2,
-	maxWordLen: 32
+	maxWordLen: 32,
+	suggestionMinWordCount: 6
 });
 
 // Options available on run time
@@ -114,6 +115,10 @@ The shortest word to index, default is 2 which adds 'ex' to the index, but not '
 #### opts.maxWordLen
 
 Same as above, but max.
+
+#### opts.suggestionMinWordCount
+
+Set how many times a word have to exist in the index to be used for suggestions. Defaults to 6.
 
 #### thinker.enableSuggestions
 
