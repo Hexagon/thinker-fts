@@ -218,12 +218,12 @@ Additionally, as boostPercentage is set to true for title, that weight can get u
 For example, if the title is 'This is the stuff', and we search for 'stuff', the base weight is four, and that is multiplied by a calculated factor 
 
 1 word matched, 4 words totally
-=
+
 1+1/4
-=
+
 1+0.25
-=
-1.25
+
+gives 1.25 in boostPercentage factor
 
 ## Field processors
 
