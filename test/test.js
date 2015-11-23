@@ -78,7 +78,32 @@ describe('Simple usage', function () {
 	});
 });
 
-describe('Simple usage', function () {
+
+describe('Simple usage: Local characters', function () {
+	var thinker = Thinker({characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g});
+
+	thinker.ranker = Thinker.rankers.standard();
+
+	// We need to make a copy of exampletexts, as feed consumes the object
+	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
+	thinker.feed(exampleTextsCopy);
+
+	describe('opts.characters', function () {	
+		var result = thinker.find("ånglok");
+
+		// The second expressin is ignored as default minWordLength is 2
+		it('Should return one expression', function () {	
+			result.expressions.length.should.equal(1);
+		});
+
+		it('Expression interpretation should equal "ånglok"', function () {
+			result.expressions[0].interpretation.should.equal("ånglok");
+		});
+
+	});
+});
+
+describe('Simple usage: Exact mode', function () {
 	var thinker = Thinker({characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g});
 
 	thinker.ranker = Thinker.rankers.standard();
@@ -481,6 +506,37 @@ describe('Word processor: Swedish stemmer', function () {
 			result.documents[1].expressions[0].should.equal(1);
 		});
 	});
+
+	describe('Search for "bemötandet" in exact mode', function () {	
+		var result = thinker.find("\"bemötandet\"");
+
+		it('Should return one expression', function () {	
+			result.expressions.length.should.equal(1);
+		});
+
+		it('Expression interpretation be unchanged("bemötandet")', function () {
+			result.expressions[0].interpretation.should.equal("bemötandet");
+		});
+
+		it('Expression should be in exact mode', function () {
+			result.expressions[0].exactMode.should.equal(true);
+		});
+
+		it('Should return one resultt', function () {
+			result.documents.length.should.equal(1);
+		});
+
+		it('First result should be a direct match (anders)', function () {
+			result.documents[0].expressions[0].should.equal(2);
+		});
+
+		it('First result should have document id 0', function () {
+			result.documents[0].id.should.equal(0);
+		});
+		
+
+	});
+
 
 	describe('Search for "Bemötas"', function () {		
 			
