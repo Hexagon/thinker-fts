@@ -356,7 +356,7 @@ describe('Suggestion', function () {
 
 	describe('Search "liaså"', function () {	
 		var result = thinker.find("liaså");
-
+		
 		it('Should return one expression', function () {
 			result.expressions.length.should.equal(1);
 		});
