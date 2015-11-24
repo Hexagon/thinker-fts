@@ -2,24 +2,28 @@
 
 [![Build status](https://travis-ci.org/Hexagon/thinker-fts.svg)](https://travis-ci.org/Hexagon/thinker-fts) [![npm version](https://badge.fury.io/js/thinker-fts.svg)](https://badge.fury.io/js/thinker-fts)
 
-Fast and extendible Node.js/Javascript full text search engine.
+Fast and extendible pure JavaScript full text search engine.
 
 ## Features
 
   * Highly optimized, will give a ranked resultset within 20 ms on a 5000 (average wikipedia sized) document dataset.
   * In-memory operation
   * Few external dependencies
-  * Natural language search
+  * Natural language searchx
   * Partial matching
   * Expression correction / suggestions
   * Weighted ranker (configurable weights for each field, all-expression-match-factor, partial vs exact factor etc.)
+  * Search modifiers (+ require, - exclude, "searchword" precise match - excepts wordprocessors)
   * Field preprocessors
 	 * HTML-Stripper
   * Word preprocessors
-	 * Swedish stemmer with stemmer stop words
-	 * Stop words
-	 * Wordforms
-	 * Stripper for multiple characters
+	 * [Stemmers](https://en.wikipedia.org/wiki/Stemming)
+	    * Swedish
+	    * English
+	 * [Stop words](https://en.wikipedia.org/wiki/Stop_words)
+	 * Word forms
+	 * [Soundex](https://en.wikipedia.org/wiki/Soundex)
+	 * Stripper for repeated characters	
   * Allows saving/loading the index to/from disk, but for small datasets you can feed the index on-the-fly.
 
 
@@ -300,13 +304,19 @@ An optional feature of the stemmers is to supply a list of words that you don't 
 
 Currently there is two stemmers available, swedish through a custom version of the Snowball algorithm, and english through the Porter algorithm.
 
-Example setting up thinker with standard ranker and english stemming
+Example setting up thinker with standard ranker, english stemming and some stemmer stopwords.
 
 ```javascript
 var
 	thinker 	= Thinker(),
 	ranker 		= Thinker.rankers.standard(),
-	stemmer 	= Thinker.processors.stemmers.english();
+	stemmer 	= Thinker.processors.stemmers.english({
+		"stemmer": true,
+		"stemming": true,
+		"dontstemthiseither": true,
+		"leonardo": true,
+		"anders", true
+	});
 
 thinker.addWordProcessor(stemmer);
 
@@ -322,14 +332,30 @@ var
 	thinker 	= Thinker(),
 	ranker 		= Thinker.rankers.standard(),
 	stemmer 	= Thinker.processors.stemmers.swedish({
-		"stemmer": true,
-		"stemming": true,
-		"dontstemthiseither": true,
+		"berta": true,
+		"jonas": true,
 		"leonardo": true,
 		"anders", true
 	});
 
 thinker.addWordProcessor(stemmer);
+
+thinker.ranker = ranker;
+```
+
+#### Soundex
+
+Soundex preprocesses the words in such way that words that sounds alike matches each other.
+
+Example setting up thinker with Soundex processing.
+
+```javascript
+var
+	thinker 	= Thinker(),
+	ranker 		= Thinker.rankers.standard(),
+	soundex 	= Thinker.processors.soundex();
+
+thinker.addWordProcessor(soundex);
 
 thinker.ranker = ranker;
 ```
@@ -342,6 +368,8 @@ Note: Dependencies is installed automatically by npm
   [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) (https://github.com/hiddentao/fast-levenshtein)
 
   [stemmer](https://github.com/wooorm/stemmer) (https://github.com/wooorm/stemmer)
+
+  [node-soundex](https://github.com/LouisT/node-soundex) (https://github.com/LouisT/node-soundex)
 
 
 ## Development dependencies

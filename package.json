@@ -1,7 +1,7 @@
 {
   "name": "thinker-fts",
-  "version": "1.0.7",
-  "description": "Javascript/Node.js in-memory full text search engine.",
+  "version": "1.0.8",
+  "description": "Pure Javascript/Node.js in-memory full text search engine.",
   "author": "Hexagon <github.com/hexagon>",
   "contributors": [{
     "name": "Pehr Boman",
@@ -22,11 +22,17 @@
     "thinker",
     "fts",
     "fulltext",
-    "in-memory"
+    "in-memory",
+    "levenshtein",
+    "soundex",
+    "porter",
+    "stemmer",
+    "full text search"
   ],
   "dependencies": {
     "fast-levenshtein": "*",
-    "stemmer": "*"
+    "stemmer": "*",
+    "soundex": "*"
   },
   "devDependencies": {
     "mocha": "*",

@@ -29,7 +29,7 @@ var should = require('should'),
 
 /* START OF EXAMPLE DATA */
 var exampleTexts = [
-	[0,"Artikel nummer noll","Det här är ettan i det hela, Anders är ett namn. Jonas likaså antikvitets. Bemötandet. effektivitet Kalle olle lars"],
+	[0,"Artikel nummer noll","Det här är ettan i det hela, Anders är ett namn. Jonas likaså antikvitets. Bemötandet. effektivitet Kalle olle lars considerable"],
 	[1,"Bemötande testtitel med extra ord","Brödtext nummer ett. Ander antikviteten olle lars sven"],
 	[2,"Titeln med extra Testning","Brödtext i sanden artikeln två. Bemött namn Andersson antikvitet nyhet, nyheter, nyheten, nyhetens, nya olle"],
 ];
@@ -405,10 +405,9 @@ describe('Advanced ranker', function () {
 });
 
 describe('Suggestion', function () {
-	var thinker = Thinker({suggestionMinWordCount: 1});
+	var thinker = Thinker({suggestionMinWordCount: 1, enableSuggestions: true});
 	var ranker = Thinker.rankers.standard();
 
-	thinker.enableSuggestions = true;
 	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
@@ -805,7 +804,9 @@ describe('Word processor: English stemmer', function () {
 
 	var thinker 	= Thinker();
 	var ranker 		= Thinker.rankers.standard();
-	var stemmer 	= Thinker.processors.stemmers.english();
+	var stemmer 	= Thinker.processors.stemmers.english({
+		"considerable": true
+	});
 
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 
@@ -817,8 +818,40 @@ describe('Word processor: English stemmer', function () {
 	describe('Search for "considerable"', function () {	
 		var result = thinker.find("considerable");
 
-		it('Should be interpreted as "consider"', function () {	
-			result.expressions[0].interpretation.should.equal("consider");
+		it('Should be interpreted as "considerable"', function () {	
+			result.expressions[0].interpretation.should.equal("considerable");
+		});
+
+		it('Should give one result"', function () {	
+			result.documents.length.should.equal(1);
+		});
+
+	});
+
+	describe('Search for "considering"', function () {	
+		var result = thinker.find("considering");
+
+		it('Should be interpreted as "consid"', function () {	
+			result.expressions[0].interpretation.should.equal("consid");
+		});
+
+		it('Should give one PARTIAL result"', function () {	
+			result.documents.length.should.equal(1);
+			result.documents[0].expressions[0].should.equal(1);
+		});
+
+	});
+
+	describe('Search for "consider"', function () {	
+		var result = thinker.find("consider");
+
+		it('Should be interpreted as "consid"', function () {	
+			result.expressions[0].interpretation.should.equal("consid");
+		});
+
+		it('Should give one PARTIAL result"', function () {	
+			result.documents.length.should.equal(1);
+			result.documents[0].expressions[0].should.equal(1);
 		});
 
 	});
@@ -869,6 +902,47 @@ describe('Word processor: English stemmer', function () {
 	});
 	
 });
+
+describe('Word processor: English soundex', function () {
+
+	var thinker 	= Thinker();
+	var ranker 		= Thinker.rankers.standard();
+	var soundex 	= Thinker.processors.soundex();
+
+
+	thinker.addWordProcessor(soundex);
+	thinker.ranker = ranker;
+
+	thinker.feed([
+		[0,"This is a tile","This is a textual"],
+		[1,"This is a tilly","This is a sexual"],
+		
+	]);
+
+	describe('Search for "tile"', function () {	
+		var result = thinker.find("tile");
+
+		it('Should be interpreted as "T400"', function () {	
+			result.expressions[0].interpretation.should.equal("T400");
+		});
+
+		it('Should give two results', function () {	
+			result.documents.length.should.equal(2);
+		});
+
+	});
+
+	describe('Search for "textual"', function () {	
+		var result = thinker.find("textual");
+
+		it('Should give one results', function () {	
+			result.documents.length.should.equal(1);
+		});
+
+	});
+	
+});
+
 
 describe('Field processor: HTML-Stripper', function () {
 	var thinker = Thinker();
