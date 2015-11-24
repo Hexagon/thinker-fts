@@ -61,15 +61,15 @@ console.log(result);
 			interpretation: 'ut',
 			original: 'ut',
 			suggestion: undefined,
-			exactMode: false,
-			hits: [/* wierd array of data containing all hits to this expression */]
+			modifier: undefined,
+			exactMode: false
 		},
 		{
 			interpretation: 'in',
 			original: 'in',
 			suggestion: undefined,
-			exactMode: false,
-			hits: [/* ... */]
+			modifier: undefined,
+			exactMode: false
 		}
 	],
 	documents: [
@@ -93,7 +93,7 @@ Please not that you _have to_ connect a ranker, else find won't provide a result
 
 ## Basic configuration
 
-Thinkers default configuration is overridden by supplying an options object to Thinkers constructor. There is also a couple of settings that can be changed on runtime, both is shown below
+Thinkers default configuration is overridden by supplying an options object to Thinkers constructor.
 
 ```javascript
 
@@ -105,11 +105,9 @@ var thinker = Thinker({
 	maxWildcardWordLen: 32,
 	minWordLen: 2,
 	maxWordLen: 32,
-	suggestionMinWordCount: 6
+	suggestionMinWordCount: 6,
+	enableSuggestions: false
 });
-
-// Options available on run time
-thinker.enableSuggestions = true;
 
 ```
 
@@ -146,7 +144,7 @@ Same as above, but max.
 
 Set how many times a word have to exist in the index to be used for suggestions. Defaults to 6.
 
-#### thinker.enableSuggestions
+#### opts.enableSuggestions
 
 If this is enabled, thinker will use unprocessed words from the inputted texts to give suggestions when expressions doesn't give an direct match.
 
