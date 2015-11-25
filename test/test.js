@@ -167,16 +167,16 @@ describe('Simple usage: Modifiers', function () {
 });
 
 describe('Partial match', function () {
-	var thinker = Thinker();
+	var thinker = Thinker({
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
+	});
 
 	thinker.ranker = Thinker.rankers.standard();
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 
-	thinker.feed(exampleTextsCopy, {
-		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
-	});
+	thinker.feed(exampleTextsCopy);
 
 	describe('Search for "emöt"', function () {	
 		var result = thinker.find("emöt");
@@ -202,16 +202,15 @@ describe('Partial match', function () {
 });
 
 describe('Partial match with minimum word length match 5', function () {
-	var thinker = Thinker(),
+	var thinker = Thinker({
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g,
+		minWildcardWordLen: 5 } ),
 		ranker = Thinker.rankers.standard();
 
 	thinker.ranker = ranker;
 
 	// We need to make a copy of exampletexts, as feed consumes the object
-	thinker.feed(JSON.parse(JSON.stringify(exampleTexts)), {
-		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g,
-		minWildcardWordLen: 5
-	});
+	thinker.feed(JSON.parse(JSON.stringify(exampleTexts)));
 
 	describe('Search for "emöt"', function () {
 		var result = thinker.find('emöt');
@@ -231,7 +230,9 @@ describe('Partial match with minimum word length match 5', function () {
 });
 
 describe('Ranker', function () {
-	var thinker = Thinker(),
+	var thinker = Thinker( {
+			characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
+		}),
 		ranker = Thinker.rankers.standard({
 			directHit: 1,
 			partialHit: 0.5,
@@ -248,9 +249,7 @@ describe('Ranker', function () {
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 
-	thinker.feed(exampleTextsCopy, {
-		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
-	});
+	thinker.feed(exampleTextsCopy);
 
 	describe('Basic search "artikel"', function () {	
 		var result = thinker.find("artikel");
@@ -296,7 +295,7 @@ describe('Ranker', function () {
 
 
 describe('Ranker: Boost percentage', function () {
-	var thinker = Thinker(),
+	var thinker = Thinker({ characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g }),
 		ranker = Thinker.rankers.standard({
 			directHit: 1,
 			partialHit: 0.5,
@@ -313,9 +312,7 @@ describe('Ranker: Boost percentage', function () {
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 
-	thinker.feed(exampleTextsCopy, {
-		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
-	});
+	thinker.feed(exampleTextsCopy);
 
 	describe('Basic search "artikel"', function () {	
 		var result = thinker.find("artikel");
@@ -405,7 +402,12 @@ describe('Advanced ranker', function () {
 });
 
 describe('Suggestion', function () {
-	var thinker = Thinker({suggestionMinWordCount: 1, enableSuggestions: true});
+	var thinker = Thinker({
+		suggestionMinWordCount: 1,
+		enableSuggestions: true,
+		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
+	});
+
 	var ranker = Thinker.rankers.standard();
 
 	thinker.ranker = ranker;
@@ -413,9 +415,7 @@ describe('Suggestion', function () {
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 
-	thinker.feed(exampleTextsCopy, {
-		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
-	});
+	thinker.feed(exampleTextsCopy);
 
 	describe('Search "liaså"', function () {	
 		var result = thinker.find("liaså");
@@ -431,7 +431,7 @@ describe('Suggestion', function () {
 });
 
 describe('Word-processor: Stopwords', function () {
-	var thinker   = Thinker();
+	var thinker   = Thinker({characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g});
 	var ranker 	  = Thinker.rankers.standard();
 	var stopwords = Thinker.processors.stopwords({
 		"artikel": true,
@@ -444,9 +444,7 @@ describe('Word-processor: Stopwords', function () {
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
 
-	thinker.feed(exampleTextsCopy, {
-		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
-	});
+	thinker.feed(exampleTextsCopy);
 
 	describe('Basic search "Bemötande"', function () {	
 		var result = thinker.find("bemötande");
@@ -473,9 +471,7 @@ describe('Word-processor: Multiples', function () {
 
 	// We need to make a copy of exampletexts, as feed consumes the object
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
-	thinker.feed(exampleTextsCopy, {
-		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
-	});
+	thinker.feed(exampleTextsCopy);
 
 	describe('Search "KaaalLlle"', function () {
 		var result = thinker.find("KaaalLlle");
@@ -509,7 +505,7 @@ describe('Word processor: Swedish stemmer', function () {
 		"jonas": true
 	};
 
-	var thinker 	= Thinker();
+	var thinker 	= Thinker({characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g});
 	var ranker 		= Thinker.rankers.standard();
 	var stemmer 	= Thinker.processors.stemmers.swedish(stemmerStopwords);
 	var exampleTextsCopy = JSON.parse(JSON.stringify(exampleTexts));
@@ -517,9 +513,7 @@ describe('Word processor: Swedish stemmer', function () {
 	thinker.addWordProcessor(stemmer);
 	thinker.ranker = ranker;
 
-	thinker.feed(exampleTextsCopy, {
-		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
-	});
+	thinker.feed(exampleTextsCopy);
 
 	describe('Search for stopword "anders"', function () {	
 		var result = thinker.find("anders");
@@ -945,7 +939,7 @@ describe('Word processor: English soundex', function () {
 
 
 describe('Field processor: HTML-Stripper', function () {
-	var thinker = Thinker();
+	var thinker = Thinker({characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g});
 	var ranker = Thinker.rankers.standard();
 	var stripHtml = Thinker.processors.stripHtml();
 
@@ -957,9 +951,7 @@ describe('Field processor: HTML-Stripper', function () {
 		[0,"&#x74;&#x69;&#x74;&#x6C;&#x65;","<!-- htmlcomment --><p><script>scriptcontent</script><h1>atitle</h1><style> div > #id { stylecontent; } </style><img alt=\"imgdescription\"><a href=\"http://url\">linktext</a><br><hr/><fakeunclosedtag>aword<strong>&Aring;rsringar &lt;innanf&ouml;r&gt; </p>"]
 	];
 
-	thinker.feed(exampleHtml, {
-		characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g
-	});
+	thinker.feed(exampleHtml);
 
 	describe('Search "title"', function () {
 		var result = thinker.find("title");
