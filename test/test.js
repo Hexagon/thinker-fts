@@ -326,7 +326,7 @@ describe('Ranker: Boost percentage', function () {
 
 		describe('Result weight', function () {
 			it('First result should have a weight of 4*1*2*1.3333', function () {
-				result.documents[0].weight.toFixed(4).should.equal('10.6667');
+				result.documents[0].weight.toFixed(4).should.equal('15.4667');
 			});
 
 			it('Second result should have a weight of 2*0.5*1.5', function () {
