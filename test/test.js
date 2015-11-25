@@ -31,7 +31,7 @@ var should = require('should'),
 var exampleTexts = [
 	[0,"Artikel nummer noll","Det här är ettan i det hela, Anders är ett namn. Jonas likaså antikvitets. Bemötandet. effektivitet Kalle olle lars considerable"],
 	[1,"Bemötande testtitel med extra ord","Brödtext nummer ett. Ander antikviteten olle lars sven"],
-	[2,"Titeln med extra Testning","Brödtext i sanden artikeln två. Bemött namn Andersson antikvitet nyhet, nyheter, nyheten, nyhetens, nya olle"],
+	[2,"Titeln med extra Testning","Brödtext i sanden artikeln artikeln artikeln artikeln två. Bemött namn Andersson antikvitet nyhet, nyheter, nyheten, nyhetens, nya olle"],
 ];
 
 /* END OF EXAMPLE DATA */
