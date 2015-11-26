@@ -37,7 +37,7 @@
   "devDependencies": {
     "mocha": "*",
     "should": "*",
-    "bemchmark": "*"
+    "benchmark": "*"
   },
   "license": "MIT"
 }
