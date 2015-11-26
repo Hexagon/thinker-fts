@@ -602,8 +602,8 @@ describe('Word processor: Swedish stemmer', function () {
 			result.expressions.length.should.equal(1);		
 		});		
 		
-		it('Expression interpretation should equal "nyhet"', function () {		
-			result.expressions[0].interpretation.should.equal("nyhet");		
+		it('Expression interpretation should equal "ny"', function () {		
+			result.expressions[0].interpretation.should.equal("ny");		
 		});		
 		
 		it('Should return 1 document', function () {		
