@@ -36,7 +36,8 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "should": "*"
+    "should": "*",
+    "benchmark": "*"
   },
   "license": "MIT"
 }
