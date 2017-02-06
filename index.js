@@ -1,1 +1,1 @@
-module.exports = require('./lib/Thinker.js');
+module.exports = require("./lib/Thinker.js");

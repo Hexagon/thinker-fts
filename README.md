@@ -71,8 +71,8 @@ console.log(result);
 			exactMode: false 
 		}
 	],
-  	performance: { 
-  		find: 1.107075,
+	performance: { 
+		find: 1.107075,
 		rank: 0.598558,
 		sort: 0.688598,
 		filter: 0.060182,
