@@ -1,3 +1,1 @@
-var Thinker = require('./lib/Thinker.js');
-
-module.exports = Thinker;
+module.exports = require('./lib/Thinker.js');

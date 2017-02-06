@@ -2,18 +2,19 @@
 
 [![Build status](https://travis-ci.org/Hexagon/thinker-fts.svg)](https://travis-ci.org/Hexagon/thinker-fts) [![npm version](https://badge.fury.io/js/thinker-fts.svg)](https://badge.fury.io/js/thinker-fts) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f4a95b3f01b644d9af07476e4e048c60)](https://www.codacy.com/app/robinnilsson/thinker-fts?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Hexagon/thinker-fts&amp;utm_campaign=Badge_Grade) [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://img.shields.io/badge/license-MIT-blue.svg)
 
-Fast and extendible pure JavaScript full text search engine.
+Fast, extendible and stand alone pure JavaScript full text search engine.
 
 ## Features
 
-  * Highly optimized, will give a ranked resultset within 20 ms on a 5000 (average wikipedia sized) document dataset.
   * In-memory operation
+  * Highly optimized, will give a ranked resultset within 10 ms on a 5000 (average wikipedia sized) document dataset.
   * Few external dependencies
-  * Natural language searchx
+  * Natural language search
   * Partial matching
   * Expression correction / suggestions
   * Weighted ranker (configurable weights for each field, all-expression-match-factor, partial vs exact factor etc.)
-  * Search modifiers (+ require, - exclude, "searchword" precise match - excepts wordprocessors)
+  * Search modifiers (+ require, - exclude, "searchword" precise match which excepts wordprocessors)
+  * Result filters
   * Field preprocessors
 	 * HTML-Stripper
   * Word preprocessors
@@ -23,8 +24,7 @@ Fast and extendible pure JavaScript full text search engine.
 	 * [Stop words](https://en.wikipedia.org/wiki/Stop_words)
 	 * Word forms
 	 * [Soundex](https://en.wikipedia.org/wiki/Soundex)
-	 * Stripper for repeated characters	
-  * Allows saving/loading the index to/from disk, but for small datasets you can feed the index on-the-fly.
+	 * Stripper for repeated characters
 
 
 ## Installation
@@ -43,10 +43,10 @@ var 	Thinker = require('thinker-fts'),
 // Connect standard ranker
 thinker.ranker = Thinker.rankers.standard();
 
-// Feed thinker with documents of format [id, textfield, textfield, ...]
+// Feed thinker with an array of documents formatted like { id: id, fields: [textfield, textfield] }
 thinker.feed([
-	[1, 'Lorem', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'],
-	[2, 'Ipsum', 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.']
+	{ id: 1, fields: ['Lorem', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'] },
+	{ id: 2, fields: ['Ipsum', 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'] }
 ]);
 
 // Search for text
@@ -54,42 +54,41 @@ var result = thinker.find('ut in');
 
 // Show result
 console.log(result);
-
-{
-	expressions: [
-		{
-			interpretation: 'ut',
+{ 
+	expressions: [ 
+		{ 
 			original: 'ut',
+			interpretation: [Object],
 			suggestion: undefined,
 			modifier: undefined,
-			exactMode: false
+			exactMode: false 
 		},
 		{
-			interpretation: 'in',
 			original: 'in',
+			interpretation: [Object],
 			suggestion: undefined,
 			modifier: undefined,
-			exactMode: false
+			exactMode: false 
 		}
 	],
+  	performance: { 
+  		find: 1.107075,
+		rank: 0.598558,
+		sort: 0.688598,
+		filter: 0.060182,
+		total: 2.639159 
+	},
 	documents: [
-		{
-			id: 1,
-			weight: 12,
-			expressions: [1,0]	// <- Array where index 0 correspods to first expression, 
-								// 1 to second expression etc. 
-								// Value is 2 for exact match
-								// 1 for partial match and 0 for no match
-		}
+		{ id: 2, weight: 1.5, expressions: [Object] },
+		{ id: 1, weight: 1.5, expressions: [Object] } 
 	],
-	findTime: 0.908248, // ms
-	rankTime: 0.109632 // ms
+	totalHits: 2,
+	returnedHits: 2 
 }
 
 ```
 
 Please not that you _have to_ connect a ranker, else find won't provide a result set. The ranker build the result set.
-
 
 ## Basic configuration
 
@@ -99,14 +98,16 @@ Thinkers default configuration is overridden by supplying an options object to T
 
 // Options only available at initialization
 var thinker = Thinker({
-	characters: /([a-zA-Z0-9']*)/g,
+	characters: /([a-zA-Z0-9]*)/g,
 	caseSensitive: false,
-	minWildcardWordLen: 4,
+	minWildcardWordLen: 3,
 	maxWildcardWordLen: 32,
 	minWordLen: 2,
 	maxWordLen: 32,
 	suggestionMinWordCount: 6,
-	enableSuggestions: false
+	enableSuggestions: false,
+	optionalPlusFromExpressions: 1,
+	coalesceWords: 1
 });
 
 ```
@@ -150,10 +151,25 @@ If this is enabled, thinker will use unprocessed words from the inputted texts t
 
 This is what results.expressions[n] will look like when you search for 'exression' (missing p)
 
+#### opts.optionalPlusFromExpressions
+
+Will be renamed, I promise. 
+
+This is how many words there should be in the expression before all words become optional. Defaults to 1 (disabled).
+
+If you set this to 4, and search for a three word expression, all words will need to exist in the document to giva e match. In the background ```what you want``` become ```+what +you +want```.
+If you giva a four word expression, all words become optional as usuabl.
+
+#### opts.coalesceWords
+
+When this property is set to greater than one, augmented words will be inserted into the index, consisting of current and next word. If this property is set to 3 and the field is "i want cookies today", a search for ```iwantcookies```, ```wantcookiestoday``` or ```wantcookies``` will give a match.
 
 ```javascript 
 {
-	interpretation: 'exression',
+	interpretation: {
+		original: 'expression',
+		...
+	},
 	...
 	suggestion: 'expression',
 	...
@@ -198,7 +214,7 @@ Object defining a different base weight for a match in each field of a document,
 
 ```javascript
 var docs = [
-	[1,"This is the title", "This is the ingress", "This is the text"],
+	{ id: 1, fields: ["This is the title", "This is the ingress", "This is the text"] },
 	...
 ];
 ```
@@ -207,9 +223,9 @@ and your fields weights look like
 
 ```javascript
 fields: {
-	1: { weight: 4, boostPercentage: true },
-	2: { weight: 2, boostPercentage: false },
-	3: { weight: 2, boostPercentage: false }
+	0: { weight: 4, boostPercentage: true },
+	1: { weight: 2, boostPercentage: false },
+	2: { weight: 2, boostPercentage: false }
 }
 ```
 
