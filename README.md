@@ -107,7 +107,7 @@ var thinker = Thinker({
 	suggestionMinWordCount: 6,
 	enableSuggestions: false,
 	optionalPlusFromExpressions: 1,
-	coalesceWords: 1
+	concatenateWords: 1
 });
 
 ```
@@ -160,7 +160,7 @@ This is how many words there should be in the expression before all words become
 If you set this to 4, and search for a three word expression, all words will need to exist in the document to giva e match. In the background ```what you want``` become ```+what +you +want```.
 If you giva a four word expression, all words become optional as usuabl.
 
-#### opts.coalesceWords
+#### opts.concatenateWords
 
 When this property is set to greater than one, augmented words will be inserted into the index, consisting of current and next word. If this property is set to 3 and the field is "i want cookies today", a search for ```iwantcookies```, ```wantcookiestoday``` or ```wantcookies``` will give a match.
 
@@ -286,7 +286,7 @@ var thinker   = Thinker(),
 		"github": "repository"
 	});
 
-thinker.addWordProcessor(stopwords);
+thinker.addWordProcessor(wordforms);
 
 thinker.ranker = ranker;
 ```
@@ -349,7 +349,7 @@ var
 		"berta": true,
 		"jonas": true,
 		"leonardo": true,
-		"anders", true
+		"anders": true
 	});
 
 thinker.addWordProcessor(stemmer);
@@ -384,6 +384,8 @@ Note: Dependencies is installed automatically by npm
   [stemmer](https://github.com/wooorm/stemmer) (https://github.com/wooorm/stemmer)
 
   [node-soundex](https://github.com/LouisT/node-soundex) (https://github.com/LouisT/node-soundex)
+
+  [msgpack-lite](https://github.com/kawanet/msgpack-lite) (https://github.com/kawanet/msgpack-lite)
 
 
 ## Development dependencies

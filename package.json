@@ -1,6 +1,6 @@
 {
   "name": "thinker-fts",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Pure Javascript/Node.js in-memory full text search engine.",
   "author": "Hexagon <github.com/hexagon>",
   "contributors": [{
@@ -32,12 +32,12 @@
   "dependencies": {
     "fast-levenshtein": "*",
     "stemmer": "*",
-    "soundex": "*"
+    "soundex": "*",
+    "msgpack-lite": "*"
   },
   "devDependencies": {
     "mocha": "*",
-    "should": "*",
-    "benchmark": "*"
+    "should": "*"
   },
   "license": "MIT"
 }

@@ -1276,10 +1276,10 @@ describe('Word processor: English soundex', function () {
 	
 });
 
-describe('coalesceWords option', function () {
+describe('concatenateWords option', function () {
 
 	var thinker 	= Thinker({
-		coalesceWords: 3
+		concatenateWords: 3
 	});
 	var ranker 		= Thinker.rankers.standard();
 
