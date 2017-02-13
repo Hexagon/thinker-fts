@@ -1609,3 +1609,66 @@ describe('Filters', function () {
 		
 	});
 });
+
+describe('Persistance', function () {
+	describe('Store and load index', function () {
+
+		var thinker 	= Thinker(),
+			thinker2 	= Thinker(),
+
+			result;
+
+		thinker.feed([
+			{ id: 0, metadata: {a:2}, fields: ["This is a tile","This is a textual"] },
+			{ id: 1, metadata: {a:1}, fields: ["This is a tilly","This is a sexual"] },
+			{ id: 2, metadata: {a:3}, fields: ["This is a tilly","This is a usual"] },
+			{ id: 3, metadata: {a:0}, fields: ["This is a tilly","This is a muse"] }
+		]);
+
+		it('should save without error', function (done) {
+			thinker.index.toDisk("temp.idx", function (err) {
+				done(err);
+			});
+		});
+		it('should load without error', function (done) {
+			thinker2.index.fromDisk("temp.idx", function (err) {
+
+				if (err) return done(err);
+
+				result = thinker2.find({
+					expression: "this",
+					sortBy: "a",
+					direction: true
+				});
+
+				done();
+			});
+		});
+
+		it('Should be interpreted as "this"', function () {	
+			result.expressions[0].interpretation.processed.should.equal("this");
+		});
+
+		it('Should give four results', function () {	
+			result.documents.length.should.equal(4);
+		});
+
+		it('First result should have id 2', function () {	
+			result.documents[0].id.should.equal(2);
+		});
+
+		it('Second result should have id 0', function () {	
+			result.documents[1].id.should.equal(0);
+		});
+
+		it('Third result should have id 1', function () {	
+			result.documents[2].id.should.equal(1);
+		});
+
+		it('Fourth result should have id 3', function () {	
+			result.documents[3].id.should.equal(3);
+		});
+		
+	});
+});
+
