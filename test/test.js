@@ -35,7 +35,6 @@ var exampleTexts = [
 ];
 
 /* END OF EXAMPLE DATA */
-
 describe('Simple usage', function () {
 	var thinker = Thinker();
 
@@ -1670,4 +1669,92 @@ describe('Persistance', function () {
 		});
 		
 	});
+});
+
+
+describe('Tags', function () {
+
+	var thinker = Thinker({characters: /([a-zA-Z0-9åäöÅÄÖ]*)/g});
+	var ranker = Thinker.rankers.standard( );
+	var stripHtml = Thinker.processors.stripHtml();
+
+	thinker.addFieldProcessor(stripHtml);
+	thinker.ranker = ranker;
+
+	// We need to make a copy of exampletexts, as feed consumes the object
+	var exampleHtml = [
+		{ id: 0, metadata: { tags: ["apa","text"], testfilterbool: true, testfilterstring: "adfa", testfilterarr: [1,4,5] }, fields: ["Detta är en text som innehåller apa"] },
+		{ id: 1, metadata: { tags: ["kamel","text"], testfilterbool: false, testfilterstring: "asdf", testfilterarr: [2,5] }, fields: [ "Detta är en text som innehåller kamel"] },
+		{ id: 2, metadata: { tags: ["kanel","text"], testfilterbool: false, testfilterstring: "asdf", testfilterarr: [] }, fields: [ "Detta är en text som innehåller kanel"] },
+		{ id: 3, metadata: { tags: ["kanel","text"], testfilterbool: false, testfilterstring: "asd", testfilterarr: [5] }, fields: [ "Detta är en text som innehåller kanel"] },
+	];
+
+	thinker.feed(exampleHtml);
+
+	describe('Search "apa", filter on testfilterbool === false, reduce on tags.indexOf("kanel") === -1', function () {
+		var result = thinker.find( { 
+			expression: "text",
+			collect: "tags",
+			filter: (metadata) => !metadata.testfilterbool,
+			reduce: (metadata) => metadata.tags.indexOf("kanel") === -1
+		} );
+
+		it('Should return one result', function () {
+			result.documents.length.should.equal(1);
+		});
+
+	});
+
+	describe('Search "text", filter on testfilterbool === true, reduce on tags.indexOf("kanel") > -1', function () {
+		var result = thinker.find( { 
+			expression: "text",
+			collect: "tags",
+			filter: (metadata) => metadata.testfilterbool,
+			reduce: (metadata) => metadata.tags.indexOf("kanel") > -1
+		} );
+
+		it('Should return zero result', function () {
+			result.documents.length.should.equal(0);
+		});
+
+		it('Should have totalHits == 1', function () {
+			result.totalHits.should.equal(1);
+		});
+
+	});
+
+
+	describe('Search "text", filter on testfilterarr.indexOf(5), reduce on tags.indexOf("text") > -1', function () {
+		var result = thinker.find( { 
+			expression: "text",
+			collect: "tags",
+			filter: (metadata) => metadata.testfilterarr.indexOf(5),
+			reduce: (metadata) => metadata.tags.indexOf("text") > -1
+		} );
+
+		it('Should return three result', function () {
+			result.documents.length.should.equal(3);
+		});
+
+	});
+
+	describe('Search "text", filter on testfilterarr.indexOf(5), reduce on tags.indexOf("text") > -1, limit to one result', function () {
+		var result = thinker.find( { 
+			expression: "text",
+			collect: "tags",
+			filter: (metadata) => metadata.testfilterarr.indexOf(5),
+			reduce: (metadata) => metadata.tags.indexOf("text") > -1,
+			limit: 1
+		} );
+
+		it('Should return one result', function () {
+			result.documents.length.should.equal(3);
+		});
+
+		it('Should have totalHits == 3', function () {
+			result.totalHits.should.equal(3);
+		});
+
+	});
+
 });

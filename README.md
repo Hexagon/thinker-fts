@@ -14,7 +14,9 @@ Fast, extendible and stand alone pure JavaScript full text search engine.
   * Expression correction / suggestions
   * Weighted ranker (configurable weights for each field, all-expression-match-factor, partial vs exact factor etc.)
   * Search modifiers (+ require, - exclude, "searchword" precise match which excepts wordprocessors)
-  * Result filters
+  * Result filters (hard filters)
+  * Result reduction (soft filters)
+  * Metadata collection (example: collect metadata tags from all results, including those removed by reduction)
   * Field preprocessors
 	 * HTML-Stripper
   * Word preprocessors
