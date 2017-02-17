@@ -79,3 +79,4 @@ temp.idx
 
 # Local test script
 local.*.js
+local/

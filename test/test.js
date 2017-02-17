@@ -1748,7 +1748,7 @@ describe('Tags', function () {
 		} );
 
 		it('Should return one result', function () {
-			result.documents.length.should.equal(3);
+			result.documents.length.should.equal(1);
 		});
 
 		it('Should have totalHits == 3', function () {
