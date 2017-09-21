@@ -1723,7 +1723,6 @@ describe('Tags', function () {
 
 	});
 
-
 	describe('Search "text", filter on testfilterarr.indexOf(5), reduce on tags.indexOf("text") > -1', function () {
 		var result = thinker.find( { 
 			expression: "text",
@@ -1739,6 +1738,7 @@ describe('Tags', function () {
 	});
 
 	describe('Search "text", filter on testfilterarr.indexOf(5), reduce on tags.indexOf("text") > -1, limit to one result', function () {
+		
 		var result = thinker.find( { 
 			expression: "text",
 			collect: "tags",
