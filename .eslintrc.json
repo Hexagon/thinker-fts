@@ -1,34 +1,37 @@
 {
-    "env": {
-        "browser": true,
-        "commonjs": true,
-        "es6": true,
-        "node": true
-    },
-    "extends": "eslint:recommended",
-    "parserOptions": {
-        "sourceType": "module"
-    },
     "rules": {
         "indent": [
-            "error",
+            2,
             "tab"
         ],
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
         "quotes": [
-            "error",
+            2,
             "double"
         ],
         "semi": [
-            "error",
+            2,
             "always"
         ],
-        "eqeqeq": [
-            "error",
-            "always"
-        ]
-    }
+        "complexity": [
+            2,
+            47
+        ],
+        "linebreak-style": 0,
+        "no-var": 1
+    },
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "ignorePatterns": [],
+    "globals": {
+        "define": false,
+        "describe": false,
+        "it": false
+    },
+    "env": {
+        "es6": true,
+        "node": true,
+        "browser": true
+    },
+    "extends": "eslint:recommended"
 }

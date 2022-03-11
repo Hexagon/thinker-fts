@@ -1313,7 +1313,7 @@ describe('concatenateWords option', function () {
 
 	describe('Search for "thisisa"', function () {	
 		var result = thinker.find("thisisa");
-		console.log(result);
+
 		it('Should give two result', function () {	
 			result.documents.length.should.equal(2);
 		});
