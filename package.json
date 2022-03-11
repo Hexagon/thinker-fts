@@ -3,13 +3,18 @@
   "version": "1.2.0",
   "description": "Pure Javascript/Node.js in-memory full text search engine.",
   "author": "Hexagon <github.com/hexagon>",
-  "contributors": [{
-    "name": "Pehr Boman",
-    "email": "github.com/unkelpehr"
-  }],
+  "contributors": [
+    {
+      "name": "Pehr Boman",
+      "email": "github.com/unkelpehr"
+    }
+  ],
   "scripts": {
-    "test": "mocha",
-    "start": "node index.js"
+    "test": "npm run test:lint && mocha",
+    "test:lint": "eslint ./**/*.js",
+    "test:lint:fix": "eslint --fix  ./**/*.js",
+    "build": "npm run test",
+    "build:ci": "npm run test"
   },
   "repository": {
     "type": "git",
@@ -30,14 +35,15 @@
     "stemmer"
   ],
   "dependencies": {
-    "fast-levenshtein": "*",
-    "stemmer": "*",
-    "soundex": "*",
-    "msgpack-lite": "*"
+    "fast-levenshtein": "^3.0.0",
+    "msgpack-lite": "^0.1.26",
+    "soundex": "^0.2.1",
+    "stemmer": "^1.0.5"
   },
   "devDependencies": {
-    "mocha": "*",
-    "should": "*"
+    "eslint": "^8.10.0",
+    "mocha": "^9.2.2",
+    "should": "^13.2.3"
   },
   "license": "MIT"
 }

@@ -1,6 +1,6 @@
 # thinker
 
-[![Build status](https://travis-ci.org/Hexagon/thinker-fts.svg)](https://travis-ci.org/Hexagon/thinker-fts) [![npm version](https://badge.fury.io/js/thinker-fts.svg)](https://badge.fury.io/js/thinker-fts) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f4a95b3f01b644d9af07476e4e048c60)](https://www.codacy.com/app/robinnilsson/thinker-fts?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Hexagon/thinker-fts&amp;utm_campaign=Badge_Grade) [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://img.shields.io/badge/license-MIT-blue.svg)
+![Node.js CI](https://github.com/Hexagon/thinker-fts/workflows/Node.js%20CI/badge.svg?branch=master) [![npm version](https://badge.fury.io/js/thinker-fts.svg)](https://badge.fury.io/js/thinker-fts) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/f4a95b3f01b644d9af07476e4e048c60)](https://www.codacy.com/app/robinnilsson/thinker-fts?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Hexagon/thinker-fts&amp;utm_campaign=Badge_Grade) [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://img.shields.io/badge/license-MIT-blue.svg)
 
 Fast, extendible and stand alone pure JavaScript full text search engine.
 
