@@ -196,19 +196,19 @@ var thinker = Thinker(),
 thinker.ranker = ranker;
 ```
 
-#### directHit / partialHit
+### directHit / partialHit
 
 Factor to weight when an expression match a word directly resp. partially
 
-#### eachPartialExpressionFactor
+### eachPartialExpressionFactor
 
 Factor which is applied to a documents total weight when a expressions give a partial match. If the query consist of three expressions that all match partially this factor will be applied three times.
 
-#### eachDirectExpressionFactor
+### eachDirectExpressionFactor
 
 Same as above, but with direct hits.
 
-#### fields
+### fields
 
 Object defining a different base weight for a match in each field of a document, if your documents look like
 
