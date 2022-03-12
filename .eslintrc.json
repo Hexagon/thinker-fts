@@ -22,7 +22,7 @@
     "parserOptions": {
         "sourceType": "module"
     },
-    "ignorePatterns": [],
+    "ignorePatterns": ["dist/*"],
     "globals": {
         "define": false,
         "describe": false,

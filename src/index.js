@@ -24,9 +24,9 @@ THE SOFTWARE.
 
 "use strict";
 
-let levenshtein = require("fast-levenshtein"),
-	msgpack = require("msgpack-lite"),
-	fs = require("fs");
+let levenshtein = require("fast-levenshtein");
+//msgpack = require("msgpack-lite"),
+//fs = require("fs");
 
 function index(options) {
 
@@ -143,7 +143,7 @@ function index(options) {
 
 			}
 
-		},
+		}/*,
 
 		toObject = function () {
 			return {
@@ -173,7 +173,7 @@ function index(options) {
 			lookupProcessed = new Map(o.lookupProcessed);
 			lookupSuggestion = new Map(o.lookupSuggestion);
 
-		};
+		}*/;
 
 	exports = {
 		populatePartial: function ( location, wordIdx ) {
@@ -275,7 +275,7 @@ function index(options) {
 			if (closestIndex !== undefined && closestValue < 5) {
 				return closestIndex;
 			}
-		},
+		}/*,
 		toDisk: function (path, callback) {
 			let binaryData = msgpack.encode(toObject());
 			fs.writeFile(path, binaryData, function(err) {
@@ -299,7 +299,7 @@ function index(options) {
 					}
 				}
 			});
-		},
+		}*/,
 		compress: function () {
 			// Always
 			if (options.enableSuggestions) {
