@@ -913,19 +913,38 @@ var processors = /*#__PURE__*/Object.freeze({
 let time = (function () {
 	let times = {};
 
-	return function (id) {
-		let diff;
+	// Node 16, Deno, Browser
+	if (typeof performance !== "undefined" && performance) {
+		return function (id) {
+			let diff;
 
-		if (!times[id]) {
-			times[id] = performance.now();
-			return;
-		}
+			if (!times[id]) {
+				times[id] = performance.now();
+				return;
+			}
 
-		diff = performance.now() - times[id];
-		times[id] = undefined;
+			diff = performance.now() - times[id];
+			times[id] = undefined;
 
-		return diff;
-	};
+			return diff;
+		};
+
+	// Node pre 16
+	} else {
+		return function (id) {
+			let diff;
+
+			if (!times[id]) {
+				times[id] = process.hrtime();
+				return;
+			}
+
+			diff = process.hrtime(times[id]);
+			times[id] = undefined;
+
+			return (diff[0] * 1e9 + diff[1]) / 1E6;
+		};
+	}
 }());
 
 // Helper function for option defaults
