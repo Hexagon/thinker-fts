@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 import test from "./suites/default.cjs";
 import { Thinker as ThinkerDistMjs } from "../dist/thinker.min.mjs";
-import { Thinker as ThinkerSrc } from "../src/thinker.js";
+import { Thinker as ThinkerSrc } from "../src/Thinker.js";
 
 test(ThinkerDistMjs);
 test(ThinkerSrc);

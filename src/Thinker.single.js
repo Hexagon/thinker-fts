@@ -1,3 +1,3 @@
-import Thinker from "./thinker.js";
+import Thinker from "./Thinker.js";
 
 export default Thinker;
