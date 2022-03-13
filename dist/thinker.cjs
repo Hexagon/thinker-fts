@@ -923,14 +923,14 @@
   		let diff;
 
   		if (!times[id]) {
-  			times[id] = process.hrtime();
+  			times[id] = performance.now();
   			return;
   		}
 
-  		diff = process.hrtime(times[id]);
+  		diff = performance.now() - times[id];
   		times[id] = undefined;
 
-  		return (diff[0] * 1e9 + diff[1]) / 1E6;
+  		return diff;
   	};
   }());
 

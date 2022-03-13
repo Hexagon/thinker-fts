@@ -1,6 +1,6 @@
 {
   "name": "thinker-fts",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Pure Javascript/Node.js in-memory full text search engine.",
   "author": "Hexagon <github.com/hexagon>",
   "contributors": [
