@@ -24,11 +24,12 @@ THE SOFTWARE.
 
 "use strict";
 
-let levenshtein = require("fast-levenshtein");
+import levenshtein from "fast-levenshtein";
+
 //msgpack = require("msgpack-lite"),
 //fs = require("fs");
 
-function index(options) {
+function Index(options) {
 
 	let	
 		// 	Array of Array with DocumentIndex, FieldIndex, OcurrencesOfWordInCurrentDocumentAndField
@@ -143,39 +144,9 @@ function index(options) {
 
 			}
 
-		}/*,
+		};
 
-		toObject = function () {
-			return {
-
-				// Array
-				words: words,
-				documents: documents,
-
-				// Maps (EcmaScript note, when dropping support for ES5, change these to lookup: [...lookupMap])
-				lookupPreProcessed: Array.from(lookupPreProcessed.entries()),
-
-				lookupPartial: Array.from(lookupPartial.entries()),
-				lookupProcessed: Array.from(lookupProcessed.entries()),
-				lookupSuggestion: Array.from(lookupSuggestion.entries())
-
-			};
-		},
-
-		fromObject = function (o) {
-			
-			words = o.words;
-			documents = o.documents;
-
-			lookupPreProcessed = new Map(o.lookupPreProcessed);
-
-			lookupPartial = new Map(o.lookupPartial);
-			lookupProcessed = new Map(o.lookupProcessed);
-			lookupSuggestion = new Map(o.lookupSuggestion);
-
-		}*/;
-
-	exports = {
+	const exported = {
 		populatePartial: function ( location, wordIdx ) {
 			populate( location, wordIdx, lookupPartial);
 		},
@@ -275,31 +246,7 @@ function index(options) {
 			if (closestIndex !== undefined && closestValue < 5) {
 				return closestIndex;
 			}
-		}/*,
-		toDisk: function (path, callback) {
-			let binaryData = msgpack.encode(toObject());
-			fs.writeFile(path, binaryData, function(err) {
-				if(err) {
-					callback(err);
-				} else {
-					callback();
-				}
-			});
 		},
-		fromDisk: function (path, callback) {
-			fs.readFile(path, function (err, data) {
-				if (err) {
-					callback(err);
-				} else {
-					try {
-						fromObject(msgpack.decode(data));
-						callback();
-					} catch (e) {
-						callback(e);
-					}
-				}
-			});
-		}*/,
 		compress: function () {
 			// Always
 			if (options.enableSuggestions) {
@@ -311,7 +258,7 @@ function index(options) {
 			}
 		}
 	};
-	return exports;
+	return exported;
 }
 
-module.exports = index;
+export { Index };

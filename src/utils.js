@@ -53,7 +53,4 @@ function defaults (defaults, source) {
 
 }
 
-module.exports = {
-	time: time,
-	defaults: defaults
-};
+export { time, defaults };

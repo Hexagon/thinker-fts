@@ -23,10 +23,10 @@ THE SOFTWARE.
 */
 "use strict";
 
-let	Index = require("./index.js"),
-	processors = require("./processors.js"),
-	rankers = require("./rankers.js"),
-	utils = require("./utils.js");
+import { Index } from "./index.js";
+import * as processors from "./processors.js";
+import * as rankers from "./rankers.js";
+import { defaults, time } from "./utils.js";
 
 function processWord (word, opts) {
 
@@ -101,7 +101,7 @@ function Thinker (opts) {
 
 	// All these options must be set before indexing and
 	// cannot change afterwards (the object will also be frozen).
-	self.options = utils.defaults({
+	self.options = defaults({
 		characters: /([a-zA-Z0-9]*)/g,
 		caseSensitive: false,
 		minWildcardWordLen: 3,
@@ -241,9 +241,9 @@ Thinker.prototype.addWordProcessor = function (fn) {
 
 Thinker.prototype.find = function (params) {
 
-	utils.time("totalFindTime");
+	time("totalFindTime");
 
-	utils.time("findTime");
+	time("findTime");
 
 	// Allow search string instead of params
 	// Ignore that f-ed up strings can be typeof "object" :)
@@ -252,7 +252,7 @@ Thinker.prototype.find = function (params) {
 	}
 
 	// Exapand params with refaults
-	params = utils.defaults({
+	params = defaults({
 
 		// Search string
 		// Value: String
@@ -378,10 +378,10 @@ Thinker.prototype.find = function (params) {
 	}
 
 	// Done finding
-	resultSet.performance.find = utils.time("findTime");
+	resultSet.performance.find = time("findTime");
 
 	// Start ranking
-	utils.time("rankTime");
+	time("rankTime");
 
 	// Rank by weight
 	if (params.sortBy === "weight") {
@@ -398,10 +398,10 @@ Thinker.prototype.find = function (params) {
 	}
 
 	// Done ranking
-	resultSet.performance.rank = utils.time("rankTime");
+	resultSet.performance.rank = time("rankTime");
 
 	// Start filtering
-	utils.time("filterTime");
+	time("filterTime");
 
 	resultSet.totalHits = resultSet.documents.length;
 
@@ -508,7 +508,7 @@ Thinker.prototype.find = function (params) {
 	}
 
 	// Start sorting
-	utils.time("sortTime");
+	time("sortTime");
 
 	// Sort documents by total weight
 	resultSet.documents = resultSet.documents.sort(function(a, b) {
@@ -516,7 +516,7 @@ Thinker.prototype.find = function (params) {
 	});
 
 	// Done sorting
-	resultSet.performance.sort = utils.time("sortTime");
+	resultSet.performance.sort = time("sortTime");
 	
 	// Limit results, if needed
 	if (params.limit && resultSet.documents.length > params.limit) {
@@ -525,9 +525,9 @@ Thinker.prototype.find = function (params) {
 
 	resultSet.returnedHits = resultSet.documents.length;
 
-	resultSet.performance.filter = utils.time("filterTime");
+	resultSet.performance.filter = time("filterTime");
 
-	resultSet.performance.total = utils.time("totalFindTime");
+	resultSet.performance.total = time("totalFindTime");
 
 	return resultSet;
 
@@ -536,5 +536,5 @@ Thinker.prototype.find = function (params) {
 Thinker.processors = processors;
 Thinker.rankers = rankers;
 
-
-module.exports = Thinker;
+export default Thinker;
+export { Thinker };

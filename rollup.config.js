@@ -3,11 +3,12 @@ import commonjs from "@rollup/plugin-commonjs";
 
 export default [
 	{
-		input: "./src/Thinker.js",
+		input: "./src/Thinker.single.js",
 		output: {
 			file: "dist/thinker.cjs",
 			format: "umd",
-			name: "Thinker"
+			name: "Thinker",
+			exports: "default"
 		},
 		plugins: [commonjs(), nodeResolve()]
 	},

@@ -2,7 +2,7 @@
 
 ![Node.js CI](https://github.com/Hexagon/thinker-fts/workflows/Node.js%20CI/badge.svg?branch=master) [![npm version](https://badge.fury.io/js/thinker-fts.svg)](https://badge.fury.io/js/thinker-fts) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/84d7dc1fc1074d619f06546a409fdd79)](https://www.codacy.com/gh/Hexagon/thinker-fts/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Hexagon/thinker-fts&amp;utm_campaign=Badge_Grade) [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](https://img.shields.io/badge/license-MIT-blue.svg)
 
-Fast, extendible and stand alone pure JavaScript full text search engine.
+Fast, extendible and stand alone pure JavaScript full text search engine. Node. Deno. Browser.
 
 ## Features
 
@@ -27,19 +27,91 @@ Fast, extendible and stand alone pure JavaScript full text search engine.
 	*   Word forms
 	*   [Soundex](https://en.wikipedia.org/wiki/Soundex)
 	*   Stripper for repeated characters
+*   Works in Node.js >=4.0 (both require and import).
+*   Works in Deno >=1.16.
+*   Works in browsers as standalone, UMD or ES-module.
 
 ## Installation
 
-	  npm install thinker-fts
+### Node.js
 
+```npm install thinker-fts --save```
+
+JavaScript ESM
+
+```javascript
+import Thinker from "thinker-fts";
+
+const thinker = Thinker();
+```
+
+JavaScript CommonJS
+```javascript
+const Thinker = require("thinker-fts");
+
+const thinker = Thinker();
+```
+
+TypeScript
+
+*Note that only default export is available in Node.js TypeScript, as the commonjs module is used internally.*
+
+```typescript
+import Thinker from "thinker-fts";
+const thinker = Thinker();
+```
+
+### Deno
+
+JavaScript
+
+```javascript
+import Thinker from "https://cdn.jsdelivr.net/gh/hexagon/thinker-fts@4/src/thinker-fts.js";
+const thinker = Thinker();
+```
+
+TypeScript
+
+```typescript
+import { Thinker } from "https://cdn.jsdelivr.net/gh/hexagon/thinker-fts@4/src/thinker-fts.js";
+const thinker = Thinker();
+```
+
+### Browser 
+
+#### Manual
+
+*   Download latest [zipball](https://github.com/Hexagon/thinker-fts/archive/refs/heads/master.zip)
+*   Unpack
+*   Grab ```thinker.min.js``` (UMD and standalone) or ```thinker.min.mjs``` (ES-module) from the [dist/](/dist) folder
+
+#### CDN
+
+To use as a [UMD](https://github.com/umdjs/umd)-module (stand alone, [RequireJS](https://requirejs.org/) etc.)
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/thinker-fts/dist/thinker.min.js"></script>
+```
+
+To use as a [ES-module](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules)
+
+```html
+<script type="module">
+	import Thinker from "https://cdn.jsdelivr.net/npm/thinker-fts/dist/thinker.min.mjs";
+	const thinker = Thinker();
+	// ... see usage section ...
+</script>
+```
 
 ## Quick-start
 
 A simple setup with feeding and searching would look something like the snippet below
 
 ```javascript
-var 	Thinker = require('thinker-fts'),
-		thinker = Thinker();
+// See installation section for exact procedure depending on environment, this is Node.js/CommonJS
+const Thinker = require('thinker-fts'),
+
+const thinker = Thinker();
 
 // Connect standard ranker
 thinker.ranker = Thinker.rankers.standard();
@@ -55,6 +127,10 @@ var result = thinker.find('ut in');
 
 // Show result
 console.log(result);
+```
+
+Results:
+```json
 { 
 	expressions: [ 
 		{ 
@@ -377,19 +453,15 @@ thinker.ranker = ranker;
 
 ## Dependencies
 
-Note: Dependencies is installed automatically by npm
+Note: For normal usage, all needed dependencies are bundled
+
+## Development dependencies
 
   [fast-levenshtein](https://github.com/hiddentao/fast-levenshtein) (https://github.com/hiddentao/fast-levenshtein)
 
   [stemmer](https://github.com/wooorm/stemmer) (https://github.com/wooorm/stemmer)
 
   [node-soundex](https://github.com/LouisT/node-soundex) (https://github.com/LouisT/node-soundex)
-
-  [msgpack-lite](https://github.com/kawanet/msgpack-lite) (https://github.com/kawanet/msgpack-lite)
-
-## Development dependencies
-
-Note: Not needed for normal usage
 
   [mocha](https://github.com/mochajs/mocha) (https://github.com/mochajs/mocha)
 

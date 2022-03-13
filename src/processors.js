@@ -22,10 +22,8 @@ THE SOFTWARE.
 
 */
 
-"use strict";
-
-let porterStemmer = require("stemmer"),
-	Soundex = require("soundex");
+import stemmer from "stemmer";
+import Soundex from "soundex";
 
 function stopwords ( stopword ) {
 
@@ -178,7 +176,7 @@ function englishStemmer ( stopwords ) {
 	return function ( w ) {
 		// Dont process stopwords
 		if ( stopwords[w] === true ) return w;
-		return porterStemmer( w );
+		return stemmer( w );
 	};
 }
 
@@ -188,15 +186,17 @@ function soundex ( ) {
 	};
 }
 
-module.exports = {
-	stemmers: {
-		swedish: swedishStemmer,
-		english: englishStemmer
-	},
-	soundex: soundex,
-	stopwords: stopwords,
-	wordforms: wordforms,
-	multiples: multiples,
-	stripHtml: stripHtml,
-	dashes: dashes
+const stemmers = {
+	swedish: swedishStemmer,
+	english: englishStemmer
+};
+
+export {
+	stemmers,
+	soundex,
+	stopwords,
+	wordforms,
+	multiples,
+	stripHtml,
+	dashes
 };

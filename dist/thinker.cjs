@@ -4,9 +4,7 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Thinker = factory());
 })(this, (function () { 'use strict';
 
-  var src = {exports: {}};
-
-  var levenshtein = {exports: {}};
+  var levenshtein$1 = {exports: {}};
 
   const peq = new Uint32Array(0x10000);
   const myers_32 = (a, b) => {
@@ -256,7 +254,9 @@
       window.Levenshtein = Levenshtein;
     }
   }());
-  }(levenshtein, levenshtein.exports));
+  }(levenshtein$1, levenshtein$1.exports));
+
+  var levenshtein = levenshtein$1.exports;
 
   /*
 
@@ -282,13 +282,10 @@
 
   */
 
-  (function (module, exports) {
-
-  let levenshtein$1 = levenshtein.exports;
   //msgpack = require("msgpack-lite"),
   //fs = require("fs");
 
-  function index(options) {
+  function Index(options) {
 
   	let	
   		// 	Array of Array with DocumentIndex, FieldIndex, OcurrencesOfWordInCurrentDocumentAndField
@@ -403,39 +400,9 @@
 
   			}
 
-  		}/*,
+  		};
 
-  		toObject = function () {
-  			return {
-
-  				// Array
-  				words: words,
-  				documents: documents,
-
-  				// Maps (EcmaScript note, when dropping support for ES5, change these to lookup: [...lookupMap])
-  				lookupPreProcessed: Array.from(lookupPreProcessed.entries()),
-
-  				lookupPartial: Array.from(lookupPartial.entries()),
-  				lookupProcessed: Array.from(lookupProcessed.entries()),
-  				lookupSuggestion: Array.from(lookupSuggestion.entries())
-
-  			};
-  		},
-
-  		fromObject = function (o) {
-  			
-  			words = o.words;
-  			documents = o.documents;
-
-  			lookupPreProcessed = new Map(o.lookupPreProcessed);
-
-  			lookupPartial = new Map(o.lookupPartial);
-  			lookupProcessed = new Map(o.lookupProcessed);
-  			lookupSuggestion = new Map(o.lookupSuggestion);
-
-  		}*/;
-
-  	exports = {
+  	const exported = {
   		populatePartial: function ( location, wordIdx ) {
   			populate( location, wordIdx, lookupPartial);
   		},
@@ -526,7 +493,7 @@
   		findClosestWord: function ( w ) {
   			let closestValue = Infinity, closestIndex, distance;
   			lookupSuggestion.forEach(function(value, key) {
-  				distance = levenshtein$1.get(w, key);
+  				distance = levenshtein.get(w, key);
   				if (distance < closestValue) {
   					closestIndex = key;
   					closestValue = distance;
@@ -535,31 +502,7 @@
   			if (closestIndex !== undefined && closestValue < 5) {
   				return closestIndex;
   			}
-  		}/*,
-  		toDisk: function (path, callback) {
-  			let binaryData = msgpack.encode(toObject());
-  			fs.writeFile(path, binaryData, function(err) {
-  				if(err) {
-  					callback(err);
-  				} else {
-  					callback();
-  				}
-  			});
   		},
-  		fromDisk: function (path, callback) {
-  			fs.readFile(path, function (err, data) {
-  				if (err) {
-  					callback(err);
-  				} else {
-  					try {
-  						fromObject(msgpack.decode(data));
-  						callback();
-  					} catch (e) {
-  						callback(e);
-  					}
-  				}
-  			});
-  		}*/,
   		compress: function () {
   			// Always
   			if (options.enableSuggestions) {
@@ -571,11 +514,8 @@
   			}
   		}
   	};
-  	return exports;
+  	return exported;
   }
-
-  module.exports = index;
-  }(src, src.exports));
 
   var stemmer_1 = stemmer;
 
@@ -772,6 +712,8 @@
   })((function(fn){module.exports=fn;}));
   }(soundex$1));
 
+  var Soundex = soundex$1.exports;
+
   /*
 
   Copyright (c) 2015 Hexagon <robinnilsson@gmail.com>
@@ -795,9 +737,6 @@
   THE SOFTWARE.
 
   */
-
-  let porterStemmer = stemmer_1,
-  	Soundex = soundex$1.exports;
 
   function stopwords ( stopword ) {
 
@@ -950,7 +889,7 @@
   	return function ( w ) {
   		// Dont process stopwords
   		if ( stopwords[w] === true ) return w;
-  		return porterStemmer( w );
+  		return stemmer_1( w );
   	};
   }
 
@@ -960,18 +899,21 @@
   	};
   }
 
-  var processors$1 = {
-  	stemmers: {
-  		swedish: swedishStemmer,
-  		english: englishStemmer
-  	},
-  	soundex: soundex,
-  	stopwords: stopwords,
-  	wordforms: wordforms,
-  	multiples: multiples,
-  	stripHtml: stripHtml,
-  	dashes: dashes
+  const stemmers = {
+  	swedish: swedishStemmer,
+  	english: englishStemmer
   };
+
+  var processors = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    stemmers: stemmers,
+    soundex: soundex,
+    stopwords: stopwords,
+    wordforms: wordforms,
+    multiples: multiples,
+    stripHtml: stripHtml,
+    dashes: dashes
+  });
 
   // Helper function for measuring execution time
   let time = (function () {
@@ -1026,11 +968,6 @@
 
   }
 
-  var utils$2 = {
-  	time: time,
-  	defaults: defaults
-  };
-
   /*
 
   Copyright (c) 2015 Hexagon <robinnilsson@gmail.com>
@@ -1055,8 +992,6 @@
 
   */
 
-  let utils$1 = utils$2;
-
   /* Default ranker */
   function standard (options) {
   	
@@ -1066,7 +1001,7 @@
   		boostPercentage: false
   	};
 
-  	options = utils$1.defaults({
+  	options = defaults({
   		exactHit: 1.5,
   		processedHit: 1,
   		partialHit: 0.5,
@@ -1205,7 +1140,7 @@
 
   	return function (options) {
 
-  		options = utils$1.defaults({
+  		options = defaults({
   			resultSet: null,
   			index: null,
   			sortBy: null
@@ -1321,10 +1256,11 @@
   	
   }
 
-  var rankers$1 = {
-  	standard: standard,
-  	property: property
-  };
+  var rankers = /*#__PURE__*/Object.freeze({
+    __proto__: null,
+    standard: standard,
+    property: property
+  });
 
   /*
 
@@ -1349,11 +1285,6 @@
   THE SOFTWARE.
 
   */
-
-  let	Index = src.exports,
-  	processors = processors$1,
-  	rankers = rankers$1,
-  	utils = utils$2;
 
   function processWord (word, opts) {
 
@@ -1424,11 +1355,11 @@
   	}
 
   	self.ranker = function() {};
-  	self.propertyRanker = rankers.property();
+  	self.propertyRanker = property();
 
   	// All these options must be set before indexing and
   	// cannot change afterwards (the object will also be frozen).
-  	self.options = utils.defaults({
+  	self.options = defaults({
   		characters: /([a-zA-Z0-9]*)/g,
   		caseSensitive: false,
   		minWildcardWordLen: 3,
@@ -1568,9 +1499,9 @@
 
   Thinker.prototype.find = function (params) {
 
-  	utils.time("totalFindTime");
+  	time("totalFindTime");
 
-  	utils.time("findTime");
+  	time("findTime");
 
   	// Allow search string instead of params
   	// Ignore that f-ed up strings can be typeof "object" :)
@@ -1579,7 +1510,7 @@
   	}
 
   	// Exapand params with refaults
-  	params = utils.defaults({
+  	params = defaults({
 
   		// Search string
   		// Value: String
@@ -1705,10 +1636,10 @@
   	}
 
   	// Done finding
-  	resultSet.performance.find = utils.time("findTime");
+  	resultSet.performance.find = time("findTime");
 
   	// Start ranking
-  	utils.time("rankTime");
+  	time("rankTime");
 
   	// Rank by weight
   	if (params.sortBy === "weight") {
@@ -1725,10 +1656,10 @@
   	}
 
   	// Done ranking
-  	resultSet.performance.rank = utils.time("rankTime");
+  	resultSet.performance.rank = time("rankTime");
 
   	// Start filtering
-  	utils.time("filterTime");
+  	time("filterTime");
 
   	resultSet.totalHits = resultSet.documents.length;
 
@@ -1835,7 +1766,7 @@
   	}
 
   	// Start sorting
-  	utils.time("sortTime");
+  	time("sortTime");
 
   	// Sort documents by total weight
   	resultSet.documents = resultSet.documents.sort(function(a, b) {
@@ -1843,7 +1774,7 @@
   	});
 
   	// Done sorting
-  	resultSet.performance.sort = utils.time("sortTime");
+  	resultSet.performance.sort = time("sortTime");
   	
   	// Limit results, if needed
   	if (params.limit && resultSet.documents.length > params.limit) {
@@ -1852,9 +1783,9 @@
 
   	resultSet.returnedHits = resultSet.documents.length;
 
-  	resultSet.performance.filter = utils.time("filterTime");
+  	resultSet.performance.filter = time("filterTime");
 
-  	resultSet.performance.total = utils.time("totalFindTime");
+  	resultSet.performance.total = time("totalFindTime");
 
   	return resultSet;
 
@@ -1863,9 +1794,6 @@
   Thinker.processors = processors;
   Thinker.rankers = rankers;
 
-
-  var Thinker_1 = Thinker;
-
-  return Thinker_1;
+  return Thinker;
 
 }));

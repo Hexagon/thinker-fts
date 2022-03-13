@@ -1,6 +1,4 @@
-var src = {exports: {}};
-
-var levenshtein = {exports: {}};
+var levenshtein$1 = {exports: {}};
 
 const peq = new Uint32Array(0x10000);
 const myers_32 = (a, b) => {
@@ -250,7 +248,9 @@ var fastestLevenshtein = {
     window.Levenshtein = Levenshtein;
   }
 }());
-}(levenshtein, levenshtein.exports));
+}(levenshtein$1, levenshtein$1.exports));
+
+var levenshtein = levenshtein$1.exports;
 
 /*
 
@@ -276,13 +276,10 @@ THE SOFTWARE.
 
 */
 
-(function (module, exports) {
-
-let levenshtein$1 = levenshtein.exports;
 //msgpack = require("msgpack-lite"),
 //fs = require("fs");
 
-function index(options) {
+function Index(options) {
 
 	let	
 		// 	Array of Array with DocumentIndex, FieldIndex, OcurrencesOfWordInCurrentDocumentAndField
@@ -397,39 +394,9 @@ function index(options) {
 
 			}
 
-		}/*,
+		};
 
-		toObject = function () {
-			return {
-
-				// Array
-				words: words,
-				documents: documents,
-
-				// Maps (EcmaScript note, when dropping support for ES5, change these to lookup: [...lookupMap])
-				lookupPreProcessed: Array.from(lookupPreProcessed.entries()),
-
-				lookupPartial: Array.from(lookupPartial.entries()),
-				lookupProcessed: Array.from(lookupProcessed.entries()),
-				lookupSuggestion: Array.from(lookupSuggestion.entries())
-
-			};
-		},
-
-		fromObject = function (o) {
-			
-			words = o.words;
-			documents = o.documents;
-
-			lookupPreProcessed = new Map(o.lookupPreProcessed);
-
-			lookupPartial = new Map(o.lookupPartial);
-			lookupProcessed = new Map(o.lookupProcessed);
-			lookupSuggestion = new Map(o.lookupSuggestion);
-
-		}*/;
-
-	exports = {
+	const exported = {
 		populatePartial: function ( location, wordIdx ) {
 			populate( location, wordIdx, lookupPartial);
 		},
@@ -520,7 +487,7 @@ function index(options) {
 		findClosestWord: function ( w ) {
 			let closestValue = Infinity, closestIndex, distance;
 			lookupSuggestion.forEach(function(value, key) {
-				distance = levenshtein$1.get(w, key);
+				distance = levenshtein.get(w, key);
 				if (distance < closestValue) {
 					closestIndex = key;
 					closestValue = distance;
@@ -529,31 +496,7 @@ function index(options) {
 			if (closestIndex !== undefined && closestValue < 5) {
 				return closestIndex;
 			}
-		}/*,
-		toDisk: function (path, callback) {
-			let binaryData = msgpack.encode(toObject());
-			fs.writeFile(path, binaryData, function(err) {
-				if(err) {
-					callback(err);
-				} else {
-					callback();
-				}
-			});
 		},
-		fromDisk: function (path, callback) {
-			fs.readFile(path, function (err, data) {
-				if (err) {
-					callback(err);
-				} else {
-					try {
-						fromObject(msgpack.decode(data));
-						callback();
-					} catch (e) {
-						callback(e);
-					}
-				}
-			});
-		}*/,
 		compress: function () {
 			// Always
 			if (options.enableSuggestions) {
@@ -565,11 +508,8 @@ function index(options) {
 			}
 		}
 	};
-	return exports;
+	return exported;
 }
-
-module.exports = index;
-}(src, src.exports));
 
 var stemmer_1 = stemmer;
 
@@ -766,6 +706,8 @@ var soundex$1 = {exports: {}};
 })((function(fn){module.exports=fn;}));
 }(soundex$1));
 
+var Soundex = soundex$1.exports;
+
 /*
 
 Copyright (c) 2015 Hexagon <robinnilsson@gmail.com>
@@ -789,9 +731,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 */
-
-let porterStemmer = stemmer_1,
-	Soundex = soundex$1.exports;
 
 function stopwords ( stopword ) {
 
@@ -944,7 +883,7 @@ function englishStemmer ( stopwords ) {
 	return function ( w ) {
 		// Dont process stopwords
 		if ( stopwords[w] === true ) return w;
-		return porterStemmer( w );
+		return stemmer_1( w );
 	};
 }
 
@@ -954,18 +893,21 @@ function soundex ( ) {
 	};
 }
 
-var processors$1 = {
-	stemmers: {
-		swedish: swedishStemmer,
-		english: englishStemmer
-	},
-	soundex: soundex,
-	stopwords: stopwords,
-	wordforms: wordforms,
-	multiples: multiples,
-	stripHtml: stripHtml,
-	dashes: dashes
+const stemmers = {
+	swedish: swedishStemmer,
+	english: englishStemmer
 };
+
+var processors = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  stemmers: stemmers,
+  soundex: soundex,
+  stopwords: stopwords,
+  wordforms: wordforms,
+  multiples: multiples,
+  stripHtml: stripHtml,
+  dashes: dashes
+});
 
 // Helper function for measuring execution time
 let time = (function () {
@@ -1020,11 +962,6 @@ function defaults (defaults, source) {
 
 }
 
-var utils$2 = {
-	time: time,
-	defaults: defaults
-};
-
 /*
 
 Copyright (c) 2015 Hexagon <robinnilsson@gmail.com>
@@ -1049,8 +986,6 @@ THE SOFTWARE.
 
 */
 
-let utils$1 = utils$2;
-
 /* Default ranker */
 function standard (options) {
 	
@@ -1060,7 +995,7 @@ function standard (options) {
 		boostPercentage: false
 	};
 
-	options = utils$1.defaults({
+	options = defaults({
 		exactHit: 1.5,
 		processedHit: 1,
 		partialHit: 0.5,
@@ -1199,7 +1134,7 @@ function property () {
 
 	return function (options) {
 
-		options = utils$1.defaults({
+		options = defaults({
 			resultSet: null,
 			index: null,
 			sortBy: null
@@ -1315,10 +1250,11 @@ function property () {
 	
 }
 
-var rankers$1 = {
-	standard: standard,
-	property: property
-};
+var rankers = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  standard: standard,
+  property: property
+});
 
 /*
 
@@ -1343,11 +1279,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 */
-
-let	Index = src.exports,
-	processors = processors$1,
-	rankers = rankers$1,
-	utils = utils$2;
 
 function processWord (word, opts) {
 
@@ -1418,11 +1349,11 @@ function Thinker (opts) {
 	}
 
 	self.ranker = function() {};
-	self.propertyRanker = rankers.property();
+	self.propertyRanker = property();
 
 	// All these options must be set before indexing and
 	// cannot change afterwards (the object will also be frozen).
-	self.options = utils.defaults({
+	self.options = defaults({
 		characters: /([a-zA-Z0-9]*)/g,
 		caseSensitive: false,
 		minWildcardWordLen: 3,
@@ -1562,9 +1493,9 @@ Thinker.prototype.addWordProcessor = function (fn) {
 
 Thinker.prototype.find = function (params) {
 
-	utils.time("totalFindTime");
+	time("totalFindTime");
 
-	utils.time("findTime");
+	time("findTime");
 
 	// Allow search string instead of params
 	// Ignore that f-ed up strings can be typeof "object" :)
@@ -1573,7 +1504,7 @@ Thinker.prototype.find = function (params) {
 	}
 
 	// Exapand params with refaults
-	params = utils.defaults({
+	params = defaults({
 
 		// Search string
 		// Value: String
@@ -1699,10 +1630,10 @@ Thinker.prototype.find = function (params) {
 	}
 
 	// Done finding
-	resultSet.performance.find = utils.time("findTime");
+	resultSet.performance.find = time("findTime");
 
 	// Start ranking
-	utils.time("rankTime");
+	time("rankTime");
 
 	// Rank by weight
 	if (params.sortBy === "weight") {
@@ -1719,10 +1650,10 @@ Thinker.prototype.find = function (params) {
 	}
 
 	// Done ranking
-	resultSet.performance.rank = utils.time("rankTime");
+	resultSet.performance.rank = time("rankTime");
 
 	// Start filtering
-	utils.time("filterTime");
+	time("filterTime");
 
 	resultSet.totalHits = resultSet.documents.length;
 
@@ -1829,7 +1760,7 @@ Thinker.prototype.find = function (params) {
 	}
 
 	// Start sorting
-	utils.time("sortTime");
+	time("sortTime");
 
 	// Sort documents by total weight
 	resultSet.documents = resultSet.documents.sort(function(a, b) {
@@ -1837,7 +1768,7 @@ Thinker.prototype.find = function (params) {
 	});
 
 	// Done sorting
-	resultSet.performance.sort = utils.time("sortTime");
+	resultSet.performance.sort = time("sortTime");
 	
 	// Limit results, if needed
 	if (params.limit && resultSet.documents.length > params.limit) {
@@ -1846,9 +1777,9 @@ Thinker.prototype.find = function (params) {
 
 	resultSet.returnedHits = resultSet.documents.length;
 
-	resultSet.performance.filter = utils.time("filterTime");
+	resultSet.performance.filter = time("filterTime");
 
-	resultSet.performance.total = utils.time("totalFindTime");
+	resultSet.performance.total = time("totalFindTime");
 
 	return resultSet;
 
@@ -1857,7 +1788,4 @@ Thinker.prototype.find = function (params) {
 Thinker.processors = processors;
 Thinker.rankers = rankers;
 
-
-var Thinker_1 = Thinker;
-
-export { Thinker_1 as default };
+export { Thinker, Thinker as default };

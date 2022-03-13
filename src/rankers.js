@@ -24,7 +24,7 @@ THE SOFTWARE.
 
 "use strict";
 
-let utils = require("./utils.js");
+import { defaults } from "./utils.js";
 
 /* Default ranker */
 function standard (options) {
@@ -35,7 +35,7 @@ function standard (options) {
 		boostPercentage: false
 	};
 
-	options = utils.defaults({
+	options = defaults({
 		exactHit: 1.5,
 		processedHit: 1,
 		partialHit: 0.5,
@@ -174,7 +174,7 @@ function property () {
 
 	return function (options) {
 
-		options = utils.defaults({
+		options = defaults({
 			resultSet: null,
 			index: null,
 			sortBy: null
@@ -290,7 +290,4 @@ function property () {
 	
 }
 
-module.exports = {
-	standard: standard,
-	property: property
-};
+export { standard, property };

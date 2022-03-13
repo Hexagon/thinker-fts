@@ -22,9 +22,8 @@ THE SOFTWARE.
 
 */
 
-import test from "./suites/default.cjs";
-import { Thinker as ThinkerDistMjs } from "../dist/thinker.min.mjs";
-import { Thinker as ThinkerSrc } from "../src/thinker.js";
+const
+	test = require("./suites/default.cjs"),
+	ThinkerDistCjs = require("../dist/thinker.cjs");
 
-test(ThinkerDistMjs);
-test(ThinkerSrc);
+test(ThinkerDistCjs);

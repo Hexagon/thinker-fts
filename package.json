@@ -1,6 +1,6 @@
 {
   "name": "thinker-fts",
-  "version": "1.2.1",
+  "version": "2.0.0",
   "description": "Pure Javascript/Node.js in-memory full text search engine.",
   "author": "Hexagon <github.com/hexagon>",
   "contributors": [
@@ -9,6 +9,7 @@
       "email": "github.com/unkelpehr"
     }
   ],
+  "type": "module",
   "scripts": {
     "test": "npm run test:lint && mocha",
     "test:coverage": "echo Notimplemented",
@@ -19,7 +20,8 @@
     "build:precleanup": "(rm -rf dist/* || del /Q dist\\*)",
     "build:dist": "rollup -c ./rollup.config.js",
     "build:minify": "uglifyjs dist/thinker.cjs --source-map -o dist/thinker.min.js && uglifyjs dist/thinker.mjs --source-map -o dist/thinker.min.mjs",
-    "build:typings": "echo Notimplemented"
+    "build:typings": "echo Notimplemented",
+    "build:cleanup": "(rm dist/thinker.mjs || del dist\\thinker.mjs)"
   },
   "main": "./dist/thinker.cjs",
   "browser": "./dist/thinker.min.js",
