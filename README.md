@@ -73,7 +73,7 @@ const thinker = Thinker();
 or
 
 ```javascript
-import Thinker from "https://deno.land/x/thinker-fts/dist/thinker.min.mjs";
+import Thinker from "https://deno.land/x/thinker/dist/thinker.min.mjs";
 const thinker = Thinker();
 ```
 
