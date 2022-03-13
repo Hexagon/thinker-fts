@@ -66,14 +66,14 @@ const thinker = Thinker();
 JavaScript
 
 ```javascript
-import Thinker from "https://cdn.jsdelivr.net/gh/hexagon/thinker-fts@4/src/thinker-fts.js";
+import Thinker from "https://cdn.jsdelivr.net/gh/hexagon/thinker-fts@2/dist/thinker.min.mjs";
 const thinker = Thinker();
 ```
 
-TypeScript
+or
 
-```typescript
-import { Thinker } from "https://cdn.jsdelivr.net/gh/hexagon/thinker-fts@4/src/thinker-fts.js";
+```javascript
+import Thinker from "https://deno.land/x/thinker-fts/dist/thinker.min.mjs";
 const thinker = Thinker();
 ```
 
