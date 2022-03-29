@@ -1,6 +1,6 @@
 {
   "name": "thinker-fts",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Pure Javascript/Node.js in-memory full text search engine.",
   "author": "Hexagon <github.com/hexagon>",
   "contributors": [
@@ -31,12 +31,7 @@
     ".": {
       "import": "./dist/thinker.mjs",
       "require": "./dist/thinker.cjs",
-      "browser": "./dist/croner.min.js"
-    },
-    "./minified": {
-      "import": "./dist/croner.min.mjs",
-      "require": "./dist/croner.min.js",
-      "browser": "./dist/croner.min.js"
+      "browser": "./dist/thinker.min.js"
     }
   },
   "files": [
@@ -69,7 +64,7 @@
     "rollup": "^2.70.0",
     "should": "^13.2.3",
     "soundex": "^0.2.1",
-    "stemmer": "^1.0.5",
+    "stemmer": "^2.0.0",
     "uglify-js": "^3.15.3"
   },
   "license": "MIT"

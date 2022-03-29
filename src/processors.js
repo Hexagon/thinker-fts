@@ -22,7 +22,7 @@ THE SOFTWARE.
 
 */
 
-import stemmer from "stemmer";
+import { stemmer } from "stemmer";
 import Soundex from "soundex";
 
 function stopwords ( stopword ) {
