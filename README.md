@@ -109,7 +109,7 @@ A simple setup with feeding and searching would look something like the snippet 
 
 ```javascript
 // See installation section for exact procedure depending on environment, this is Node.js/CommonJS
-const Thinker = require('thinker-fts');
+const Thinker = require('thinker-fts'),
 
 const thinker = Thinker();
 
@@ -405,7 +405,7 @@ var
 		"stemming": true,
 		"dontstemthiseither": true,
 		"leonardo": true,
-		"anders": true
+		"anders", true
 	});
 
 thinker.addWordProcessor(stemmer);
