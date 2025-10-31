@@ -13,7 +13,7 @@ Fast, extendible and stand alone pure JavaScript full text search engine. Node. 
 *   Partial matching
 *   Expression correction / suggestions
 *   Weighted ranker (configurable weights for each field, all-expression-match-factor, partial vs exact factor etc.)
-*   Search modifiers (+ require, - exclude, "searchword" precise match which excepts wordprocessors)
+*   Search modifiers (+ require, - exclude, "searchword" precise match which accepts wordprocessors)
 *   Result filters (hard filters)
 *   Result reduction (soft filters)
 *   Metadata collection (example: collect metadata tags from all results, including those removed by reduction)
@@ -109,7 +109,7 @@ A simple setup with feeding and searching would look something like the snippet 
 
 ```javascript
 // See installation section for exact procedure depending on environment, this is Node.js/CommonJS
-const Thinker = require('thinker-fts'),
+const Thinker = require('thinker-fts');
 
 const thinker = Thinker();
 
@@ -165,7 +165,7 @@ Results:
 
 ```
 
-Please not that you _have to_ connect a ranker, else find won't provide a result set. The ranker build the result set.
+Please note that you _have to_ connect a ranker, else find won't provide a result set. The ranker build the result set.
 
 ## Basic configuration
 
@@ -203,7 +203,7 @@ Self explanatory, true or false
 
 ### opts.minWildcardWordLen
 
-Thinker always does partial matching, minWildcardWordLen sets how short parts of words that should be indexed. The default setting is 4 which matches 'xpre' to 'expression', but not 'pre'. Setting this too short could give an unnessecary amount of bogus matches and could affect performance if used with a heavy ranker.
+Thinker always does partial matching, minWildcardWordLen sets how short parts of words that should be indexed. The default setting is 4 which matches 'xpre' to 'expression', but not 'pre'. Setting this too short could give an unnecessary amount of bogus matches and could affect performance if used with a heavy ranker.
 
 ### opts.maxWildcardWordLen
 
@@ -233,8 +233,8 @@ Will be renamed, I promise.
 
 This is how many words there should be in the expression before all words become optional. Defaults to 1 (disabled).
 
-If you set this to 4, and search for a three word expression, all words will need to exist in the document to giva e match. In the background ```what you want``` become ```+what +you +want```.
-If you giva a four word expression, all words become optional as usuabl.
+If you set this to 4, and search for a three word expression, all words will need to exist in the document to give a match. In the background ```what you want``` become ```+what +you +want```.
+If you give a four word expression, all words become optional as usual.
 
 ### opts.concatenateWords
 
@@ -369,7 +369,7 @@ thinker.ranker = ranker;
 
 ### Stop words
 
-Removes words that don't give better precision, normally stuff like 'and', 'I', 'they', 'we', 'can'. Adding the most common words here can speed up the quries a bit, and save some RAM.
+Removes words that don't give better precision, normally stuff like 'and', 'I', 'they', 'we', 'can'. Adding the most common words here can speed up the queries a bit, and save some RAM.
 
 Example setting up thinker with standard ranker and stop words
 
@@ -405,7 +405,7 @@ var
 		"stemming": true,
 		"dontstemthiseither": true,
 		"leonardo": true,
-		"anders", true
+		"anders": true
 	});
 
 thinker.addWordProcessor(stemmer);
