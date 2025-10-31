@@ -202,7 +202,7 @@ Thinker.prototype.feed = function (texts, done) {
 							for(let l = 0; l < wordHistory.length - 1; l++) {
 								let augmentedWord = processWord(wordHistory.slice(l,wordHistory.length).join(""), opts);
 								
-								// Check that current word wasnt removed (undefined) by processWord
+								// Check that current word wasn't removed (undefined) by processWord
 								if (augmentedWord) {
 									addWord(augmentedWord, docIdx, j, true);  	
 								}

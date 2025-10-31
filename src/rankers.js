@@ -225,7 +225,7 @@ function property () {
 				for ( i = 0; i < match.length; i) {
 
 					documentId = match.rows[i++];
-					i++;	// Just iterate, dont' assign it to "fieldIndex" as this inst used here
+					i++;	// Just iterate, don't assign it to "fieldIndex" as this isn't used here
 					i++;	// ... same for matchCount
 
 					// Ensure that document exists in results
