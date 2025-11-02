@@ -133,7 +133,7 @@ function swedishStemmer(stopwords) {
 		let word = w.substring(0,2),
 			r1 = w.substring(2,w.length);
 
-		// Dont process stopwords
+		// Don't process stopwords
 		if (stopwords[w] === true) return w;
 
 		if (w.length <=2) return w;
@@ -141,7 +141,7 @@ function swedishStemmer(stopwords) {
 		// Remove trailing s
 		if (r1[r1.length-1]==="s") r1 = r1.substring(0,r1.length-1);
 
-		// Return if we didnt find r1
+		// Return if we didn't find r1
 		if (r1.length === 0) return word;
 		
 		// Stage 1a-1
@@ -150,12 +150,12 @@ function swedishStemmer(stopwords) {
 				r1 = r1.substring(0, r1.lastIndexOf(endings[i]));
 			}
 		}
-		// Return of we didnt find r1
+		// Return if we didn't find r1
 		if (r1.length === 0) return word;
 
 		w = word + r1;
 
-		// Dont process stopwords
+		// Don't process stopwords
 		if (stopwords[w] === true) return w;
 
 		// Stage 2, shorten suffixes
@@ -174,7 +174,7 @@ function swedishStemmer(stopwords) {
 function englishStemmer ( stopwords ) {
 	stopwords = stopwords || {};
 	return function ( w ) {
-		// Dont process stopwords
+		// Don't process stopwords
 		if ( stopwords[w] === true ) return w;
 		return stemmer( w );
 	};
