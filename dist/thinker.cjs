@@ -850,7 +850,7 @@
   		let word = w.substring(0,2),
   			r1 = w.substring(2,w.length);
 
-  		// Dont process stopwords
+  		// Don't process stopwords
   		if (stopwords[w] === true) return w;
 
   		if (w.length <=2) return w;
@@ -858,7 +858,7 @@
   		// Remove trailing s
   		if (r1[r1.length-1]==="s") r1 = r1.substring(0,r1.length-1);
 
-  		// Return if we didnt find r1
+  		// Return if we didn't find r1
   		if (r1.length === 0) return word;
   		
   		// Stage 1a-1
@@ -867,12 +867,12 @@
   				r1 = r1.substring(0, r1.lastIndexOf(endings[i]));
   			}
   		}
-  		// Return of we didnt find r1
+  		// Return if we didn't find r1
   		if (r1.length === 0) return word;
 
   		w = word + r1;
 
-  		// Dont process stopwords
+  		// Don't process stopwords
   		if (stopwords[w] === true) return w;
 
   		// Stage 2, shorten suffixes
@@ -891,7 +891,7 @@
   function englishStemmer ( stopwords ) {
   	stopwords = stopwords || {};
   	return function ( w ) {
-  		// Dont process stopwords
+  		// Don't process stopwords
   		if ( stopwords[w] === true ) return w;
   		return stemmer( w );
   	};
@@ -1214,7 +1214,7 @@
   				for ( i = 0; i < match.length; i) {
 
   					documentId = match.rows[i++];
-  					i++;	// Just iterate, dont' assign it to "fieldIndex" as this inst used here
+  					i++;	// Just iterate, don't assign it to "fieldIndex" as this isn't used here
   					i++;	// ... same for matchCount
 
   					// Ensure that document exists in results
@@ -1483,7 +1483,7 @@
   							for(let l = 0; l < wordHistory.length - 1; l++) {
   								let augmentedWord = processWord(wordHistory.slice(l,wordHistory.length).join(""), opts);
   								
-  								// Check that current word wasnt removed (undefined) by processWord
+  								// Check that current word wasn't removed (undefined) by processWord
   								if (augmentedWord) {
   									addWord(augmentedWord, docIdx, j, true);  	
   								}
