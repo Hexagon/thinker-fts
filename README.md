@@ -132,35 +132,35 @@ console.log(result);
 Results:
 ```json
 { 
-	expressions: [ 
+	"expressions": [ 
 		{ 
-			original: 'ut',
-			interpretation: [Object],
-			suggestion: undefined,
-			modifier: undefined,
-			exactMode: false 
+			"original": "ut",
+			"interpretation": "[Object]",
+			"suggestion": null,
+			"modifier": null,
+			"exactMode": false 
 		},
 		{
-			original: 'in',
-			interpretation: [Object],
-			suggestion: undefined,
-			modifier: undefined,
-			exactMode: false 
+			"original": "in",
+			"interpretation": "[Object]",
+			"suggestion": null,
+			"modifier": null,
+			"exactMode": false 
 		}
 	],
-	performance: { 
-		find: 1.107075,
-		rank: 0.598558,
-		sort: 0.688598,
-		filter: 0.060182,
-		total: 2.639159 
+	"performance": { 
+		"find": 1.107075,
+		"rank": 0.598558,
+		"sort": 0.688598,
+		"filter": 0.060182,
+		"total": 2.639159 
 	},
-	documents: [
-		{ id: 2, weight: 1.5, expressions: [Object] },
-		{ id: 1, weight: 1.5, expressions: [Object] } 
+	"documents": [
+		{ "id": 2, "weight": 1.5, "expressions": "[Object]" },
+		{ "id": 1, "weight": 1.5, "expressions": "[Object]" } 
 	],
-	totalHits: 2,
-	returnedHits: 2 
+	"totalHits": 2,
+	"returnedHits": 2 
 }
 
 ```
